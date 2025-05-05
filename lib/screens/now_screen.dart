@@ -48,7 +48,6 @@ class NowScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      // Title with plant emoji - Based on first screenshot
                       if (isMobile)
                         _buildMobileHeader(
                           context,
@@ -107,7 +106,6 @@ class NowScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 48),
 
-                      // Status items updated with icons from screenshot
                       _buildStatusItemWithIcon(
                         context,
                         icon: FontAwesomeIcons.briefcase,
