@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:get/get.dart';
 import '../models/blog_post.dart';
@@ -60,7 +61,6 @@ class BlogCard extends StatelessWidget {
                       ),
                     ),
 
-                    // Try to load actual image
                     if (blogPost.imageUrl.isNotEmpty)
                       Image.asset(
                         blogPost.imageUrl,
@@ -76,7 +76,6 @@ class BlogCard extends StatelessWidget {
             ),
             const SizedBox(height: 12),
 
-            // Blog Title - limit to one line
             Text(
               blogPost.title,
               style: TextStyle(
@@ -122,20 +121,19 @@ class BlogCard extends StatelessWidget {
     );
   }
 
-  // Helper to get icon based on blog post title
+  // icon based on blog post title
   IconData _getIconForPost(String title) {
     if (title.toLowerCase().contains('design')) {
-      return Icons.design_services_outlined;
+      return FontAwesomeIcons.pen;
     } else if (title.toLowerCase().contains('health')) {
-      return Icons.favorite_outline;
-    } else if (title.toLowerCase().contains('video') ||
-        title.toLowerCase().contains('wwdc')) {
-      return Icons.videocam_outlined;
+      return FontAwesomeIcons.heart;
+    } else if (title.toLowerCase().contains('video')) {
+      return FontAwesomeIcons.video;
     } else if (title.toLowerCase().contains('flutter') ||
         title.toLowerCase().contains('code')) {
-      return Icons.code;
+      return FontAwesomeIcons.flutter;
     } else {
-      return Icons.article_outlined;
+      return FontAwesomeIcons.newspaper;
     }
   }
 
@@ -143,8 +141,7 @@ class BlogCard extends StatelessWidget {
   Color _getColorForPost(String title) {
     if (title.toLowerCase().contains('health')) {
       return Colors.teal;
-    } else if (title.toLowerCase().contains('video') ||
-        title.toLowerCase().contains('wwdc')) {
+    } else if (title.toLowerCase().contains('video')) {
       return Colors.blue;
     } else if (title.toLowerCase().contains('flutter') ||
         title.toLowerCase().contains('code')) {

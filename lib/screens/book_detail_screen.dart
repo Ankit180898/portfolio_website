@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import '../models/book.dart';
 import '../widgets/nav_bar.dart';
@@ -206,13 +207,37 @@ class BookDetailScreen extends StatelessWidget {
                           : const Color(0xFF1E3A29),
                 ),
               ),
-              Icon(
-                Icons.content_copy_outlined,
-                size: 20,
-                color:
-                    themeController.isDarkMode
-                        ? Colors.white.withOpacity(0.8)
-                        : const Color(0xFF1E3A29).withOpacity(0.8),
+              IconButton(
+                icon: Icon(
+                  Icons.content_copy_outlined,
+                  size: 20,
+                  color:
+                      themeController.isDarkMode
+                          ? Colors.white.withOpacity(0.8)
+                          : const Color(0xFF1E3A29).withOpacity(0.8),
+                ),
+                onPressed: () {
+                  Clipboard.setData(
+                    ClipboardData(
+                      text: book.tldrPoints
+                          .map((point) => point.text)
+                          .join('\n'),
+                    ),
+                  );
+                  Get.snackbar(
+                    'Copied to clipboard',
+                    'TL;DR points copied to clipboard',
+                    snackPosition: SnackPosition.BOTTOM,
+                    backgroundColor:
+                        themeController.isDarkMode
+                            ? const Color(0xFF1E3A29)
+                            : const Color(0xFFE6F4EA),
+                    colorText:
+                        themeController.isDarkMode
+                            ? Colors.white
+                            : const Color(0xFF1E3A29),
+                  );
+                },
               ),
             ],
           ),
@@ -318,13 +343,16 @@ class BookDetailScreen extends StatelessWidget {
 
   Widget _buildBookCover() {
     // If there's a valid imageUrl, use it
-    if (book.bookLink != null && book.bookLink!.isNotEmpty) {
-      return Image.network(
-        book.bookLink!,
-        fit: BoxFit.cover,
-        errorBuilder: (context, error, stackTrace) {
-          return _buildPlaceholder();
-        },
+    if (book.imageUrl != null && book.imageUrl!.isNotEmpty) {
+      return Hero(
+        tag: book.title,
+        child: Image.network(
+          book.imageUrl!,
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) {
+            return _buildPlaceholder();
+          },
+        ),
       );
     } else {
       return _buildPlaceholder();

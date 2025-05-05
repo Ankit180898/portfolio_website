@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:portfolio_website/widgets/project_card.dart';
 import '../controllers/projects_controller.dart';
 import '../controllers/theme_controller.dart';
-import '../widgets/project_card.dart';
-import '../widgets/mobile_project_list_item.dart';
 import '../widgets/nav_bar.dart';
 import '../widgets/footer.dart';
 import '../config/theme.dart';
@@ -150,7 +149,7 @@ class ProjectsScreen extends StatelessWidget {
         itemCount: projects.length,
         separatorBuilder: (context, index) => const SizedBox(height: 20),
         itemBuilder: (context, index) {
-          return MobileProjectListItem(project: projects[index]);
+          return ProjectCard(project: projects[index]);
         },
       );
     });

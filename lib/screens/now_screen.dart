@@ -38,12 +38,13 @@ class NowScreen extends StatelessWidget {
               Responsive.responsiveContainer(
                 context: context,
                 child: Padding(
-                  padding: isMobile
-                      ? const EdgeInsets.symmetric(
-                          horizontal: 20,
-                          vertical: 40,
-                        )
-                      : Responsive.responsivePadding(context),
+                  padding:
+                      isMobile
+                          ? const EdgeInsets.symmetric(
+                            horizontal: 20,
+                            vertical: 40,
+                          )
+                          : Responsive.responsivePadding(context),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -65,42 +66,44 @@ class NowScreen extends StatelessWidget {
 
                       // Live indicator
                       Obx(
-                        () => nowController.isLive.value
-                            ? Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 16,
-                                  vertical: 8,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: isDarkMode
-                                      ? Colors.red.withOpacity(0.2)
-                                      : Colors.red.withOpacity(0.1),
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Container(
-                                      width: 8,
-                                      height: 8,
-                                      decoration: const BoxDecoration(
-                                        color: Colors.red,
-                                        shape: BoxShape.circle,
+                        () =>
+                            nowController.isLive.value
+                                ? Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 16,
+                                    vertical: 8,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color:
+                                        isDarkMode
+                                            ? Colors.red.withOpacity(0.2)
+                                            : Colors.red.withOpacity(0.1),
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Container(
+                                        width: 8,
+                                        height: 8,
+                                        decoration: const BoxDecoration(
+                                          color: Colors.red,
+                                          shape: BoxShape.circle,
+                                        ),
                                       ),
-                                    ),
-                                    const SizedBox(width: 8),
-                                    Text(
-                                      'LIVE',
-                                      style: TextStyle(
-                                        color: Colors.red,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 14,
+                                      const SizedBox(width: 8),
+                                      Text(
+                                        'LIVE',
+                                        style: TextStyle(
+                                          color: Colors.red,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14,
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            : const SizedBox(),
+                                    ],
+                                  ),
+                                )
+                                : const SizedBox(),
                       ),
                       const SizedBox(height: 48),
 
@@ -131,9 +134,9 @@ class NowScreen extends StatelessWidget {
                         context,
                         icon: FontAwesomeIcons.book,
                         text: 'Learning - ',
-                        link: 'Advanced Flutter Architecture',
+                        link: 'Javascript',
                         secondText: ' & ',
-                        secondLink: 'App Performance Optimization',
+                        secondLink: 'Flutter Architecture',
                         isDarkMode: isDarkMode,
                         textSecondaryColor: textSecondaryColor,
                       ),
@@ -142,7 +145,7 @@ class NowScreen extends StatelessWidget {
                       _buildStatusItemWithIcon(
                         context,
                         icon: FontAwesomeIcons.locationDot,
-                        text: 'Living in Bengaluru, Karnataka, India',
+                        text: 'Living in Kolkata, West Bengal, India',
                         isDarkMode: isDarkMode,
                         textSecondaryColor: textSecondaryColor,
                       ),
@@ -153,7 +156,6 @@ class NowScreen extends StatelessWidget {
                 ),
               ),
 
-              // Footer updated to match screenshot
               Responsive.responsiveContainer(
                 context: context,
                 child: Padding(
@@ -177,7 +179,6 @@ class NowScreen extends StatelessWidget {
     });
   }
 
-  // Mobile header based on first screenshot
   Widget _buildMobileHeader(
     BuildContext context,
     bool isDarkMode,
@@ -214,7 +215,6 @@ class NowScreen extends StatelessWidget {
     );
   }
 
-  // Desktop header with the angle brackets
   Widget _buildDesktopHeader(
     BuildContext context,
     bool isDarkMode,
@@ -316,7 +316,6 @@ class NowScreen extends StatelessWidget {
     );
   }
 
-  // Updated footer to match the screenshot
   Widget _buildFooter(
     BuildContext context,
     NowController nowController,
@@ -348,11 +347,7 @@ class NowScreen extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 8),
-          Text(
-            'MK XVII',
-            style: TextStyle(color: textSecondaryColor, fontSize: 14),
-          ),
+
           const SizedBox(height: 24),
 
           // Social links updated to match screenshot
@@ -373,11 +368,6 @@ class NowScreen extends StatelessWidget {
                 FontAwesomeIcons.dribbble,
                 textSecondaryColor,
                 url: "https://dribbble.com/ankit-me180898",
-              ),
-              _buildSocialIcon(
-                FontAwesomeIcons.globe,
-                textSecondaryColor,
-                url: nowController.portfolioUrl,
               ),
               _buildSocialIcon(
                 FontAwesomeIcons.envelope,

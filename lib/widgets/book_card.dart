@@ -3,7 +3,7 @@ import '../models/book.dart';
 import '../config/theme.dart';
 import 'package:get/get.dart';
 import '../controllers/theme_controller.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class BookCard extends StatelessWidget {
   final Book book;
@@ -25,7 +25,7 @@ class BookCard extends StatelessWidget {
             // Book Cover
             ClipRRect(
               borderRadius: BorderRadius.circular(8),
-              child: _buildBookCover(),
+              child: _buildBookCover(context),
             ),
             const SizedBox(height: 16),
 
@@ -58,20 +58,6 @@ class BookCard extends StatelessWidget {
             // Rating
             Row(
               children: [
-                ...List.generate(
-                  1,
-                  (index) => Icon(
-                    Icons.star,
-                    size: 16,
-                    color:
-                        index < book.rating
-                            ? const Color(0xFFFFB800)
-                            : themeController.isDarkMode
-                            ? Colors.grey[800]
-                            : Colors.grey[300],
-                  ),
-                ),
-                const SizedBox(width: 8),
                 Text(
                   book.rating.toString(),
                   style: TextStyle(
@@ -80,6 +66,15 @@ class BookCard extends StatelessWidget {
                     fontSize: 14,
                     color: themeController.textSecondaryColor,
                   ),
+                ),
+                const SizedBox(width: 8),
+                Icon(
+                  Icons.star,
+                  size: 16,
+                  color:
+                      themeController.isDarkMode
+                          ? Colors.yellow[700]
+                          : Colors.amber,
                 ),
               ],
             ),
@@ -101,22 +96,42 @@ class BookCard extends StatelessWidget {
     );
   }
 
-  Widget _buildBookCover() {
-    // Try to load SVG version of the image if available
-    if (book.imageUrl != null && book.imageUrl!.isNotEmpty) {
-      // Replace .jpg with .svg in the path
-      final svgPath = book.imageUrl!.replaceAll('.jpg', '.svg');
-
-      return SvgPicture.asset(
-        svgPath,
-        fit: BoxFit.cover,
-        width: double.infinity,
-        height: 220,
-        placeholderBuilder: (BuildContext context) => _buildPlaceholder(),
-      );
+  Widget _buildBookCover(BuildContext context) {
+    // Ensure we have an image URL
+    if (book.imageUrl == null || book.imageUrl!.isEmpty) {
+      book.imageUrl = book.getImageUrl();
     }
 
-    return _buildPlaceholder();
+    // Use CachedNetworkImage for better performance with network images
+    return Hero(
+      tag: book.title,
+      child: CachedNetworkImage(
+        imageUrl: book.imageUrl!,
+        fit: BoxFit.cover,
+        width: double.infinity,
+        height: MediaQuery.of(context).size.height * 0.25,
+        placeholder: (context, url) => _buildLoadingPlaceholder(),
+        errorWidget: (context, url, error) => _buildPlaceholder(),
+      ),
+    );
+  }
+
+  Widget _buildLoadingPlaceholder() {
+    final themeController = Get.find<ThemeController>();
+
+    return Container(
+      width: double.infinity,
+      height: 220,
+      color:
+          themeController.isDarkMode
+              ? const Color(0xFF333333)
+              : const Color(0xFFEEEEEE),
+      child: Center(
+        child: CircularProgressIndicator(
+          color: themeController.isDarkMode ? Colors.white : Colors.grey[700],
+        ),
+      ),
+    );
   }
 
   Widget _buildPlaceholder() {

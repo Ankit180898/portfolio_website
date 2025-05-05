@@ -101,12 +101,12 @@ final List<Project> allProjects = [
     type: ProjectType.web,
   ),
   Project(
-    title: "Vision AI",
+    title: "Spendify",
     description:
-        "a mobile app that transforms text prompts into AI-generated images.",
-    imageUrl: "10.webp",
-    githubLink: "https://github.com/Ankit180898/text_to_image",
-    technologies: ["Flutter", "GetX", "Hugging Face"],
+        "An Expense Tracker App to manage your daily expenses. Build using Supabase and Flutter.",
+    imageUrl: "Spendify.png",
+    githubLink: "https://github.com/Ankit180898/spendify",
+    technologies: ["Flutter", "Supabase"],
     type: ProjectType.app,
   ),
   Project(
@@ -119,14 +119,33 @@ final List<Project> allProjects = [
     type: ProjectType.app,
   ),
   Project(
-    title: "Spendify",
+    title: "Vision AI",
     description:
-        "An Expense Tracker App to manage your daily expenses. Build using Supabase and Flutter.",
-    imageUrl: "Spendify.png",
-    githubLink: "https://github.com/Ankit180898/spendify",
-    technologies: ["Flutter", "Supabase"],
+        "a mobile app that transforms text prompts into AI-generated images.",
+    imageUrl: "10.webp",
+    githubLink: "https://github.com/Ankit180898/text_to_image",
+    technologies: ["Flutter", "GetX", "Hugging Face"],
     type: ProjectType.app,
   ),
+
+  Project(
+    title: "Flight Tracker",
+    description: "a mobile app that tracks flight status and delays.",
+    imageUrl: "10.webp",
+    githubLink: "https://github.com/Ankit180898/SkyPulse",
+    technologies: ["Flutter", "GetX", "Supabase", "Aviation API"],
+    type: ProjectType.app,
+  ),
+  Project(
+    title: "Mediflow",
+    description:
+        "A chat assistant for patients to manage their appointments and get knowledge about their symptoms.",
+    imageUrl: "10.webp",
+    githubLink: "https://github.com/Ankit180898/mediflow",
+    technologies: ["Flutter", "GetX", "ChatGPT API"],
+    type: ProjectType.app,
+  ),
+
   Project(
     title: "BlogD",
     description: "BlogD is a blogging app",

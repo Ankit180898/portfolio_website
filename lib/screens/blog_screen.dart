@@ -52,13 +52,15 @@ class _BlogScreenState extends State<BlogScreen> {
               child: SingleChildScrollView(
                 child: Center(
                   child: Container(
-                    width: Responsive.isMobile(context)
-                        ? MediaQuery.of(context).size.width
-                        : AppLayout.maxContentWidth,
+                    width:
+                        Responsive.isMobile(context)
+                            ? MediaQuery.of(context).size.width
+                            : AppLayout.maxContentWidth,
                     padding: EdgeInsets.symmetric(
-                      horizontal: Responsive.isMobile(context)
-                          ? AppLayout.paddingMD
-                          : 0,
+                      horizontal:
+                          Responsive.isMobile(context)
+                              ? AppLayout.paddingMD
+                              : 0,
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -108,7 +110,7 @@ class _BlogScreenState extends State<BlogScreen> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Text(
-            "A collection of articles written by me on various topics of interest",
+            "A collection of articles on various topics of interest",
             textAlign: TextAlign.center,
             style: TextStyle(
               fontFamily: AppTheme.fontFamily,
@@ -201,11 +203,11 @@ class _BlogScreenState extends State<BlogScreen> {
 
     if (isMobile) {
       return Column(
+        spacing: AppConstants.defaultPadding,
         children: posts.map((post) => BlogCard(blogPost: post)).toList(),
       );
     }
 
-    // Use 2 columns for desktop layout as shown in the reference screenshot
     const int columns = 2;
     const double spacing = 24;
     final double gridWidth = AppLayout.maxContentWidth;

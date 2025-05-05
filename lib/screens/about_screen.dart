@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
+import 'package:portfolio_website/controllers/about_controller.dart';
+import 'package:portfolio_website/widgets/custom_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -15,6 +17,7 @@ class AboutScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeController themeController = Get.find<ThemeController>();
+    final AboutController aboutController = Get.find<AboutController>();
 
     return Obx(() {
       final isDark = themeController.isDarkMode;
@@ -139,7 +142,7 @@ class AboutScreen extends StatelessWidget {
                         // Contact buttons
                         Row(
                           children: [
-                            _buildButton(
+                            buildButton(
                               context,
                               icon: FontAwesomeIcons.envelope,
                               label: "Say hello!",
@@ -151,16 +154,13 @@ class AboutScreen extends StatelessWidget {
                               isDark: isDark,
                             ),
                             const SizedBox(width: 12),
-                            _buildButton(
-                              context,
-                              icon: FontAwesomeIcons.mugHot,
-                              label: "Buy Me a Coffee",
-                              onPressed:
-                                  () => _launchURL(
-                                    'https://www.buymeacoffee.com/example',
-                                  ),
+                            buildButton(
                               isPrimary: false,
                               isDark: isDark,
+                              context,
+                              icon: FontAwesomeIcons.download,
+                              label: "Download CV",
+                              onPressed: () => aboutController.downloadResume(),
                             ),
                           ],
                         ),
@@ -199,62 +199,11 @@ class AboutScreen extends StatelessWidget {
     });
   }
 
-  Widget _buildButton(
-    BuildContext context, {
-    required IconData icon,
-    required String label,
-    required VoidCallback onPressed,
-    required bool isPrimary,
-    required bool isDark,
-  }) {
-    return ElevatedButton.icon(
-      onPressed: onPressed,
-      icon: FaIcon(
-        icon,
-        size: 16,
-        color:
-            isPrimary
-                ? (isDark ? Colors.black : Colors.white)
-                : (isDark ? Colors.white : Colors.black),
-      ),
-      label: Text(
-        label,
-        style: TextStyle(
-          fontFamily: AppTheme.fontFamily,
-          fontSize: 14,
-          color:
-              isPrimary
-                  ? (isDark ? Colors.black : Colors.white)
-                  : (isDark ? Colors.white : Colors.black),
-        ),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor:
-            isPrimary
-                ? (isDark ? Colors.white : Colors.black)
-                : Colors.transparent,
-        foregroundColor:
-            isPrimary
-                ? (isDark ? Colors.black : Colors.white)
-                : (isDark ? Colors.white : Colors.black),
-        elevation: 0,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        side:
-            isPrimary
-                ? BorderSide.none
-                : BorderSide(
-                  color: isDark ? Colors.white70 : Colors.black54,
-                  width: 1,
-                ),
-      ),
-    );
-  }
-
   Widget _buildSectionHeader(BuildContext context, String title, bool isDark) {
     final textColor = isDark ? Colors.white : Colors.black;
 
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           title,
@@ -277,13 +226,39 @@ class AboutScreen extends StatelessWidget {
   }
 
   Widget _buildDeskSetupImage(BuildContext context, bool isDark) {
+    final isMobile = MediaQuery.of(context).size.width < AppBreakpoints.md;
     return ClipRRect(
       borderRadius: BorderRadius.circular(8),
       child: Container(
         width: double.infinity,
         height: 240,
         color: (isDark ? Colors.black : Colors.grey[200])?.withOpacity(0.3),
-        child: Image.network(
+        child:
+            isMobile
+                ? Image.asset("assets/images/desk1.jpg", fit: BoxFit.cover)
+                : Row(
+                  children: [
+                    Expanded(
+                      child: Image.asset(
+                        "assets/images/desk.jpg",
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    Image.asset("assets/images/desk1.jpg"),
+                    Expanded(
+                      child: Image.asset(
+                        "assets/images/desk2.jpg",
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ],
+                ),
+      ),
+    );
+  }
+
+  /**
+ * Image.network(
           'https://placehold.co/800x400/1a1a1a/4d4d4d?text=Desk+Setup',
           fit: BoxFit.cover,
           frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
@@ -304,27 +279,21 @@ class AboutScreen extends StatelessWidget {
             );
           },
         ),
-      ),
-    );
-  }
-
+ */
   Widget _buildSoftwareStack(BuildContext context, bool isDark) {
     final softwareList = [
+      {"name": "Flutter", "icon": FontAwesomeIcons.flutter},
+      {"name": "Dart", "icon": FontAwesomeIcons.dartLang},
+      {"name": "Git", "icon": FontAwesomeIcons.git},
+      {"name": "Android Studio", "icon": FontAwesomeIcons.android},
       {"name": "Figma", "icon": FontAwesomeIcons.figma},
-      {"name": "Voicenotes", "icon": FontAwesomeIcons.microphone},
-      {"name": "Arc", "icon": FontAwesomeIcons.globe},
-      {"name": "Raycast", "icon": FontAwesomeIcons.search},
-      {"name": "Cron", "icon": FontAwesomeIcons.calendar},
-      {"name": "Music", "icon": FontAwesomeIcons.music},
-      {"name": "Todoist", "icon": FontAwesomeIcons.listCheck},
-      {"name": "Notes", "icon": FontAwesomeIcons.noteSticky},
-      {"name": "DaVinci Resolve", "icon": FontAwesomeIcons.film},
-      {"name": "Blender", "icon": FontAwesomeIcons.cubes},
-      {"name": "VS Code", "icon": FontAwesomeIcons.code},
-      {"name": "Podcasts", "icon": FontAwesomeIcons.podcast},
-      {"name": "Bitwarden", "icon": FontAwesomeIcons.lock},
-      {"name": "ChatGPT", "icon": FontAwesomeIcons.message},
-      {"name": "Flow", "icon": FontAwesomeIcons.water},
+      {"name": "Firebase", "icon": FontAwesomeIcons.database},
+      {"name": "Supabase", "icon": FontAwesomeIcons.database},
+      {"name": "SQL", "icon": FontAwesomeIcons.database},
+      {"name": "Google Cloud", "icon": FontAwesomeIcons.google},
+      {"name": "Illustrator", "icon": FontAwesomeIcons.artstation},
+      {"name": "Confluence", "icon": FontAwesomeIcons.confluence},
+      {"name": "Jira", "icon": FontAwesomeIcons.jira},
     ];
 
     return Wrap(
@@ -366,6 +335,7 @@ class AboutScreen extends StatelessWidget {
     final jobs = [
       {
         "company": "Mobile Application Developer",
+        "link": "",
         "position": "Freelance",
         "type": "Remote",
         "startDate": "MAY 23",
@@ -376,6 +346,7 @@ class AboutScreen extends StatelessWidget {
       },
       {
         "company": "Flutter Developer",
+        "link": "https://controlshift.in",
         "position": "ControlShift",
         "type": "Hybrid",
         "startDate": "FEB 23",
@@ -385,12 +356,13 @@ class AboutScreen extends StatelessWidget {
         "isFirst": false,
       },
       {
-        "company": "Android Developer",
+        "company": "Mobile Application Developer",
+        "link": "https://unifiedinfotech.com",
         "position": "Unified Infotech",
         "type": "Remote",
         "startDate": "APR 21",
         "endDate": "NOV 22",
-        "icon": FontAwesomeIcons.android,
+        "icon": FontAwesomeIcons.mobileScreen,
         "color": const Color(0xFF5B9FFF),
         "isFirst": false,
       },
@@ -413,10 +385,12 @@ class AboutScreen extends StatelessWidget {
                       color: job["color"] as Color,
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: FaIcon(
-                      job["icon"] as IconData,
-                      color: Colors.white,
-                      size: 20,
+                    child: Center(
+                      child: FaIcon(
+                        job["icon"] as IconData,
+                        color: Colors.white,
+                        size: 20,
+                      ),
                     ),
                   ),
                   const SizedBox(width: 16),
@@ -426,14 +400,11 @@ class AboutScreen extends StatelessWidget {
                       children: [
                         Row(
                           children: [
-                            Text(
-                              job["company"] as String,
-                              style: TextStyle(
-                                fontFamily: AppTheme.fontFamily,
-                                fontSize: 18,
-                                fontWeight: AppTheme.semiBold,
-                                color: textColor,
-                              ),
+                            TextButton(
+                              onPressed: () {
+                                _launchURL(job["link"] as String);
+                              },
+                              child: Text(job["company"] as String),
                             ),
                             const SizedBox(width: 4),
                             Icon(

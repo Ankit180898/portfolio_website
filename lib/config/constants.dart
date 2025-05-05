@@ -27,6 +27,9 @@ class AppConstants {
 
   // Animation
   static const Duration defaultAnimationDuration = Duration(milliseconds: 300);
+
+  // Resume URL
+  static const String resumeUrl = 'https://drive.google.com/file/d/1lZJz7b190mjf756-wTrnKvPTAS4o8wPz/view?usp=drive_link';
 }
 
 // Breakpoints matching the reference website CSS - Exactly as defined in CSS

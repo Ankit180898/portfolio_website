@@ -1,7 +1,7 @@
 class Book {
   final String title;
   final String author;
-  final String? imageUrl;
+  String? imageUrl;
   final String date;
   final double rating;
   final int readTimeMinutes;
@@ -18,18 +18,20 @@ class Book {
     this.readTimeMinutes = 35,
     required this.tldrPoints,
     this.notes,
-    required this.bookLink,
+    this.bookLink,
   });
 
-  //Get a placeholder image URL from Unsplash
-    String getImageUrl() {
-      if (bookLink != null && bookLink!.isNotEmpty) {
-        return bookLink!;
-      }
-
-      // Use Unsplash source for a random placeholder based on the book title
-      return "https://source.unsplash.com/300x400/?book,${Uri.encodeComponent(title)}";
+  String getImageUrl() {
+    if (imageUrl != null && imageUrl!.isNotEmpty) {
+      return imageUrl!;
     }
+
+    // Format title for Open Library (spaces as underscores)
+    String formattedTitle = title.toLowerCase().replaceAll(' ', '_');
+
+    // Open Library Cover API (no API key needed)
+    return "https://covers.openlibrary.org/b/title/$formattedTitle-M.jpg?default=false";
+  }
 }
 
 class TldrPoint {
@@ -39,12 +41,11 @@ class TldrPoint {
   TldrPoint({required this.emoji, required this.text});
 }
 
-// Example book list - you can modify this easily
+// Example book list - with fixed image handling
 final List<Book> books = [
   Book(
     title: "Feel Good Productivity",
     author: "Ali Abdaal",
-    imageUrl: "assets/images/books/feel_good_productivity.jpg",
     date: "31 OCT 2023",
     rating: 5.0,
     readTimeMinutes: 35,
@@ -68,7 +69,6 @@ final List<Book> books = [
   Book(
     title: "The Creative Act",
     author: "Rick Rubin",
-    imageUrl: "assets/images/books/creative_act.jpg",
     date: "03 DEC 2023",
     rating: 5.0,
     readTimeMinutes: 40,
@@ -95,7 +95,6 @@ final List<Book> books = [
   Book(
     title: "Steve Jobs",
     author: "Walter Isaacson",
-    imageUrl: "assets/images/books/steve_jobs.jpg",
     date: "05 AUG 2023",
     rating: 5.0,
     readTimeMinutes: 60,

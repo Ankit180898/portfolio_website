@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import '../models/project.dart';
 import '../controllers/projects_controller.dart';
@@ -16,6 +17,16 @@ class ProjectCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Check if we're on mobile (width < 600)
+    final bool isMobile = MediaQuery.of(context).size.width < 600;
+
+    // Return the appropriate layout based on screen size
+    return isMobile
+        ? _buildMobileLayout(context)
+        : _buildDesktopLayout(context);
+  }
+
+  Widget _buildDesktopLayout(BuildContext context) {
     final projectsController = Get.find<ProjectsController>();
     final themeController = Get.find<ThemeController>();
 
@@ -27,58 +38,57 @@ class ProjectCard extends StatelessWidget {
       child: GestureDetector(
         onTap: () => projectsController.openProject(project),
         child: SizedBox(
-          height: 280, // Fixed total height to match SizedBox height in parent
+          height: MediaQuery.of(context).size.height * 0.40,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Project image - colored box with icon, fixed height to prevent overflow
-              ClipRRect(
-                borderRadius: BorderRadius.circular(AppLayout.borderRadiusMD),
-                child: Container(
-                  height: 220, // Fixed height for image
-                  decoration:
-                      project.title == "Notion Icons 3D"
-                          ? const BoxDecoration(
-                            gradient: LinearGradient(
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                              colors: [
-                                Color(0xFFFFA07A), // Light salmon
-                                Color(0xFFFF00A0), // Hot pink
-                                Color(0xFF9370DB), // Medium purple
-                              ],
-                            ),
-                          )
-                          : BoxDecoration(color: cardColor),
-                  child: Center(child: _getProjectIcon(project.title)),
+              // Project Image/Icon Container - Fixed height
+              Expanded(
+                flex: 5, // Allocate 5/10 of the space to the image
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(AppLayout.borderRadiusMD),
+                  child: Container(
+                    width: double.infinity,
+                    decoration:
+                        project.title == "Notion Icons 3D"
+                            ? const BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                colors: [
+                                  Color(0xFFFFA07A), // Light salmon
+                                  Color(0xFFFF00A0), // Hot pink
+                                  Color(0xFF9370DB), // Medium purple
+                                ],
+                              ),
+                            )
+                            : BoxDecoration(color: cardColor),
+                    child: Center(child: getProjectIcon(project.title)),
+                  ),
                 ),
               ),
+
               const SizedBox(height: 8),
 
-              // Project title with fixed height
-              SizedBox(
-                height: 24, // Fixed height for title
-                child: Text(
-                  project.title,
-                  style: TextStyle(
-                    fontFamily: AppTheme.fontFamily,
-                    fontSize: AppTypography.font18,
-                    fontWeight: AppTheme.semiBold,
-                    color: themeController.textPrimaryColor,
-                    height: 1.2,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+              // Project Title - Fixed height
+              Text(
+                project.title,
+                style: TextStyle(
+                  fontFamily: AppTheme.fontFamily,
+                  fontSize: AppTypography.font18,
+                  fontWeight: AppTheme.semiBold,
+                  color: themeController.textPrimaryColor,
+                  height: 1.2,
                 ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
 
-              // Project description with fixed height instead of Expanded
-              const SizedBox(
-                height: 4,
-              ), // Small gap between title and description
-              SizedBox(
-                height:
-                    24, // Fixed height that can accommodate two lines of text
+              const SizedBox(height: 4),
+
+              // Project Description - Fixed height for 3 lines
+              Expanded(
+                flex: 3, // Allocate 3/10 of the space to the description
                 child: Text(
                   project.description,
                   style: TextStyle(
@@ -87,8 +97,110 @@ class ProjectCard extends StatelessWidget {
                     height: 1.4,
                     color: themeController.textSecondaryColor,
                   ),
-                  maxLines: 2,
+                  maxLines: 3,
                   overflow: TextOverflow.ellipsis,
+                ),
+              ),
+
+              // Technology chips
+              Expanded(
+                flex: 2, // Allocate 2/10 of the space to the chips
+                child: _buildTechChips(project.technologies, themeController),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMobileLayout(BuildContext context) {
+    final projectsController = Get.find<ProjectsController>();
+    final themeController = Get.find<ThemeController>();
+
+    // Get color based on project
+    final Color cardColor = _getColorForProject(project.title);
+
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: () => projectsController.openProject(project),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Project image/icon
+              ClipRRect(
+                borderRadius: BorderRadius.circular(AppLayout.borderRadiusMD),
+                child: SizedBox(
+                  width: 80,
+                  height: 80,
+                  child: Container(
+                    decoration:
+                        project.title == "Notion Icons 3D"
+                            ? const BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                colors: [
+                                  Color(0xFFFFA07A), // Light salmon
+                                  Color(0xFFFF00A0), // Hot pink
+                                  Color(0xFF9370DB), // Medium purple
+                                ],
+                              ),
+                            )
+                            : BoxDecoration(color: cardColor),
+                    child: Center(
+                      child: getProjectIcon(project.title, size: 40),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 16),
+
+              // Project details
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Project title
+                    Text(
+                      project.title,
+                      style: TextStyle(
+                        fontFamily: AppTheme.fontFamily,
+                        fontSize: AppTypography.font18,
+                        fontWeight: AppTheme.semiBold,
+                        color: themeController.textPrimaryColor,
+                        height: 1.2,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 4),
+
+                    // Project description
+                    Text(
+                      project.description,
+                      style: TextStyle(
+                        fontFamily: AppTheme.fontFamily,
+                        fontSize: AppTypography.font14,
+                        height: 1.4,
+                        color: themeController.textSecondaryColor,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+
+                    const SizedBox(height: 8),
+
+                    // Technology chips
+                    _buildTechChips(
+                      project.technologies,
+                      themeController,
+                      scrollable: true,
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -98,51 +210,140 @@ class ProjectCard extends StatelessWidget {
     );
   }
 
-  Widget _getProjectIcon(String title) {
+  Widget _buildTechChips(
+    List<String> technologies,
+    ThemeController themeController, {
+    bool scrollable = false,
+  }) {
+    if (technologies.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    final chipsList =
+        technologies.map((tech) {
+          return Padding(
+            padding: const EdgeInsets.only(right: 6.0, bottom: 6.0),
+            child: Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 8.0,
+                vertical: 4.0,
+              ),
+              decoration: BoxDecoration(
+                color:
+                    themeController.isDarkMode
+                        ? Colors.grey[800]
+                        : Colors.grey[200],
+                borderRadius: BorderRadius.circular(4.0),
+              ),
+              child: Text(
+                tech,
+                style: TextStyle(
+                  fontFamily: AppTheme.fontFamily,
+                  fontSize: AppTypography.font12,
+                  color: themeController.textSecondaryColor,
+                ),
+              ),
+            ),
+          );
+        }).toList();
+
+    if (scrollable) {
+      return SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(children: chipsList),
+      );
+    } else {
+      return Wrap(children: chipsList);
+    }
+  }
+
+  static Widget getProjectIcon(String title, {double? size}) {
+    final double iconSize = size ?? 64.0;
+
     switch (title) {
       case "Spendify":
-        return const FaIcon(
+        return FaIcon(
           FontAwesomeIcons.wallet,
-          size: 64,
+          size: iconSize,
           color: Colors.white,
         );
-      case "Flutter Stack":
-        return const FaIcon(
-          FontAwesomeIcons.code,
-          size: 64,
+      case "Sheqonomi":
+        return FaIcon(
+          FontAwesomeIcons.podcast,
+          size: iconSize,
           color: Colors.white,
         );
-      case "Artworks":
-        return const FaIcon(
-          FontAwesomeIcons.paintBrush,
-          size: 64,
+      case "FlutterStack":
+        return FaIcon(
+          FontAwesomeIcons.flutter,
+          size: iconSize,
           color: Colors.white,
         );
-      case "Brainfish":
-        return const FaIcon(
-          FontAwesomeIcons.fish,
-          size: 64,
+      case "Artwork Images":
+        return FaIcon(
+          FontAwesomeIcons.artstation,
+          size: iconSize,
           color: Colors.white,
         );
-      case "Layers":
-        return const FaIcon(
-          FontAwesomeIcons.layerGroup,
-          size: 64,
+      case "Home|Home 4IM":
+        return SvgPicture.asset(
+          "assets/images/icons/home4im.svg",
+          width: iconSize,
+          height: iconSize,
+        );
+      case "BlogD":
+        return FaIcon(
+          FontAwesomeIcons.blog,
+          size: iconSize,
           color: Colors.white,
         );
-      case "Notion Icons 3D":
-        return const Text(
-          "n.",
-          style: TextStyle(
-            fontSize: 80,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
+      case "MonkeyType Clone":
+        return FaIcon(
+          FontAwesomeIcons.keyboard,
+          size: iconSize,
+          color: Colors.white,
+        );
+
+      case "Stock Search":
+        return Image.asset(
+          "assets/images/icons/stock.png",
+          width: iconSize,
+          height: iconSize,
+        );
+      case "News App":
+        return FaIcon(
+          FontAwesomeIcons.newspaper,
+          size: iconSize,
+          color: Colors.white,
+        );
+      case "BlingBill":
+        return Image.asset(
+          "assets/images/icons/bling.png",
+          width: iconSize,
+          height: iconSize,
+        );
+      case "Vision AI":
+        return FaIcon(
+          FontAwesomeIcons.brain,
+          size: iconSize,
+          color: Colors.white,
+        );
+      case "Flight Tracker":
+        return FaIcon(
+          FontAwesomeIcons.plane,
+          size: iconSize,
+          color: Colors.white,
+        );
+      case "Mediflow":
+        return FaIcon(
+          FontAwesomeIcons.userDoctor,
+          size: iconSize,
+          color: Colors.white,
         );
       default:
-        return const FaIcon(
+        return FaIcon(
           FontAwesomeIcons.box,
-          size: 64,
+          size: iconSize,
           color: Colors.white,
         );
     }
@@ -155,13 +356,13 @@ class ProjectCard extends StatelessWidget {
         return const Color(0xFF8BC34A); // Green
       case "Flutter Stack":
         return const Color(0xFF4169E1); // Royal blue
-      case "Artworks":
+      case "Artwork Images":
         return const Color(0xFFFF4081); // Pink
-      case "Brainfish":
+      case "Home|Home 4IM":
         return const Color(0xFFB3E141); // Bright green
-      case "Layers":
+      case "BlingBill":
         return const Color(0xFF121212); // Dark grey/black
-      case "Background Remover":
+      case "Sheqonomi":
         return const Color(0xFF039BE5); // Light blue
       default:
         // For other projects, generate a random color
@@ -181,49 +382,4 @@ class ProjectCard extends StatelessWidget {
       throw Exception('Could not launch $url');
     }
   }
-}
-
-// Custom painter for fish icon
-class FishIconPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final Paint paint =
-        Paint()
-          ..color = Colors.white
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 5.0
-          ..strokeCap = StrokeCap.round
-          ..strokeJoin = StrokeJoin.round;
-
-    final Path path = Path();
-
-    // Draw fish body (oval)
-    path.addOval(
-      Rect.fromCenter(
-        center: Offset(size.width * 0.5, size.height * 0.5),
-        width: size.width * 0.7,
-        height: size.height * 0.4,
-      ),
-    );
-
-    // Draw tail
-    path.moveTo(size.width * 0.85, size.height * 0.5);
-    path.lineTo(size.width, size.height * 0.35);
-    path.moveTo(size.width * 0.85, size.height * 0.5);
-    path.lineTo(size.width, size.height * 0.65);
-
-    // Draw eye
-    path.addOval(
-      Rect.fromCenter(
-        center: Offset(size.width * 0.35, size.height * 0.45),
-        width: size.width * 0.1,
-        height: size.height * 0.1,
-      ),
-    );
-
-    canvas.drawPath(path, paint);
-  }
-
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) => false;
 }

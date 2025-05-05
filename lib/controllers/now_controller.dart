@@ -5,7 +5,7 @@ class NowController extends GetxController {
       <String>[
         '🛠️ Product Designer @ Brainfish',
         '📚 Reading - Designing Products People Love & Make Epic Money',
-        '📍 Living in Kerala, India',
+        '📍 Living in Kolkata, India',
       ].obs;
 
   final RxBool isLive = true.obs;

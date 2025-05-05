@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:portfolio_website/config/theme.dart';
+import 'package:portfolio_website/widgets/dotted_line.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../models/resource.dart';
 import '../widgets/nav_bar.dart';
@@ -8,7 +9,6 @@ import '../widgets/footer.dart';
 import '../utils/responsive_helper.dart';
 import '../controllers/theme_controller.dart';
 import 'resource_detail_screen.dart';
-import 'dart:ui';
 
 class ResourcesScreen extends StatefulWidget {
   const ResourcesScreen({super.key});
@@ -196,7 +196,7 @@ class _ResourcesScreenState extends State<ResourcesScreen> {
         Padding(
           padding: const EdgeInsets.only(bottom: 16.0),
           child: Text(
-            "BLENDER FILES",
+            "FLUTTER COOL RESOURCES",
             style: TextStyle(
               fontFamily: 'HankenGrotesk',
               fontSize: 14,
@@ -285,35 +285,3 @@ class _ResourcesScreenState extends State<ResourcesScreen> {
   }
 }
 
-// Custom painter for dotted line
-class DottedLinePainter extends CustomPainter {
-  final Color color;
-  final double dashWidth;
-  final double dashSpace;
-
-  DottedLinePainter({
-    required this.color,
-    this.dashWidth = 5,
-    this.dashSpace = 3,
-  });
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    double startX = 0;
-    final paint =
-        Paint()
-          ..color = color
-          ..strokeWidth = 1;
-
-    while (startX < size.width) {
-      canvas.drawLine(Offset(startX, 0), Offset(startX + dashWidth, 0), paint);
-      startX += dashWidth + dashSpace;
-    }
-  }
-
-  @override
-  bool shouldRepaint(DottedLinePainter oldDelegate) =>
-      oldDelegate.color != color ||
-      oldDelegate.dashWidth != dashWidth ||
-      oldDelegate.dashSpace != dashSpace;
-}

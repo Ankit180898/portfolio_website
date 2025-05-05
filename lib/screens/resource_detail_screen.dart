@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:portfolio_website/screens/resources_screen.dart';
+import 'package:portfolio_website/widgets/dotted_line.dart';
 import '../models/resource.dart';
 import '../widgets/nav_bar.dart';
 import '../widgets/footer.dart';
 import '../utils/responsive_helper.dart';
 import '../controllers/theme_controller.dart';
-import 'dart:ui';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 // Data class for goal items
@@ -528,34 +527,4 @@ class ResourceDetailScreen extends StatelessWidget {
 }
 
 // Custom painter for dotted line
-class DottedLinePainter extends CustomPainter {
-  final Color color;
-  final double dashWidth;
-  final double dashSpace;
 
-  DottedLinePainter({
-    required this.color,
-    this.dashWidth = 5,
-    this.dashSpace = 3,
-  });
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    double startX = 0;
-    final paint =
-        Paint()
-          ..color = color
-          ..strokeWidth = 1;
-
-    while (startX < size.width) {
-      canvas.drawLine(Offset(startX, 0), Offset(startX + dashWidth, 0), paint);
-      startX += dashWidth + dashSpace;
-    }
-  }
-
-  @override
-  bool shouldRepaint(DottedLinePainter oldDelegate) =>
-      oldDelegate.color != color ||
-      oldDelegate.dashWidth != dashWidth ||
-      oldDelegate.dashSpace != dashSpace;
-}
