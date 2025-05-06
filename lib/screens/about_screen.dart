@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:portfolio_website/controllers/about_controller.dart';
 import 'package:portfolio_website/widgets/custom_button.dart';
+import 'package:portfolio_website/widgets/dotted_line.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -167,19 +168,34 @@ class AboutScreen extends StatelessWidget {
                         const SizedBox(height: 60),
 
                         // Desk Setup
-                        _buildSectionHeader(context, 'DESK SETUP', isDark),
+                        _buildSectionHeader(
+                          context,
+                          'DESK SETUP',
+                          isDark,
+                          themeController,
+                        ),
                         const SizedBox(height: 20),
                         _buildDeskSetupImage(context, isDark),
                         const SizedBox(height: 60),
 
                         // Software Stack
-                        _buildSectionHeader(context, 'SOFTWARE STACK', isDark),
+                        _buildSectionHeader(
+                          context,
+                          'SOFTWARE STACK',
+                          isDark,
+                          themeController,
+                        ),
                         const SizedBox(height: 20),
                         _buildSoftwareStack(context, isDark),
 
                         // Timeline
                         const SizedBox(height: 60),
-                        _buildSectionHeader(context, 'TIMELINE', isDark),
+                        _buildSectionHeader(
+                          context,
+                          'TIMELINE',
+                          isDark,
+                          themeController,
+                        ),
                         const SizedBox(height: 20),
                         _buildTimeline(context, isDark),
 
@@ -199,7 +215,12 @@ class AboutScreen extends StatelessWidget {
     });
   }
 
-  Widget _buildSectionHeader(BuildContext context, String title, bool isDark) {
+  Widget _buildSectionHeader(
+    BuildContext context,
+    String title,
+    bool isDark,
+    ThemeController themeController,
+  ) {
     final textColor = isDark ? Colors.white : Colors.black;
 
     return Column(
@@ -216,10 +237,9 @@ class AboutScreen extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 8),
-        Container(
-          height: 1,
-          width: double.infinity,
-          color: textColor.withOpacity(0.1),
+        CustomPaint(
+          painter: DottedLinePainter(color: themeController.textMutedColor),
+          size: const Size(double.infinity, 1),
         ),
       ],
     );

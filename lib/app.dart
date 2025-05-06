@@ -14,8 +14,8 @@ class PortfolioApp extends StatelessWidget {
 
     // Use Obx to reactively rebuild when theme changes
     return Obx(() {
-      print('Rebuilding app with themeMode: ${themeController.themeMode}');
-      print('IsDarkMode: ${themeController.isDarkMode}');
+      debugPrint('Rebuilding app with themeMode: ${themeController.themeMode}');
+      debugPrint('IsDarkMode: ${themeController.isDarkMode}');
 
       return GetMaterialApp(
         title: 'Ankit Kumar | Portfolio',

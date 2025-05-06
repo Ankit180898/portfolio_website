@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:portfolio_website/config/constants.dart';
+import 'package:portfolio_website/widgets/footer.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../controllers/theme_controller.dart';
 import '../controllers/now_controller.dart';
@@ -29,7 +31,7 @@ class NowScreen extends StatelessWidget {
         backgroundColor: isDarkMode ? const Color(0xFF18181B) : Colors.white,
         body: SingleChildScrollView(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               // Navigation bar for both mobile and desktop
               const NavBar(currentIndex: 5),
@@ -148,23 +150,13 @@ class NowScreen extends StatelessWidget {
                         textSecondaryColor: textSecondaryColor,
                       ),
 
-                      const SizedBox(height: 64),
-                    ],
-                  ),
-                ),
-              ),
-
-              Responsive.responsiveContainer(
-                context: context,
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 24),
-                  child: Column(
-                    children: [
-                      _buildFooter(
-                        context,
-                        nowController,
-                        isDarkMode,
-                        textSecondaryColor,
+                      const SizedBox(height: 80),
+                      Responsive.responsiveContainer(
+                        context: context,
+                        child: Padding(
+                          padding: Responsive.responsivePadding(context),
+                          child: const Footer(),
+                        ),
                       ),
                     ],
                   ),

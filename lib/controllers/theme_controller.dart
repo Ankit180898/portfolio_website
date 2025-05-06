@@ -34,7 +34,7 @@ class ThemeController extends GetxController {
     super.onInit();
     // Load saved theme
     _loadSavedTheme();
-    print('Theme initialized: isDarkMode = ${_isDarkMode.value}');
+    debugPrint('Theme initialized: isDarkMode = ${_isDarkMode.value}');
 
     // Set up reaction to theme changes
     ever(_isDarkMode, _updateTheme);
@@ -43,7 +43,7 @@ class ThemeController extends GetxController {
   // Load the saved theme preference
   void _loadSavedTheme() {
     final savedTheme = _storage.read<bool>(_key);
-    print('Saved theme value from storage: $savedTheme');
+    debugPrint('Saved theme value from storage: $savedTheme');
     if (savedTheme != null) {
       _isDarkMode.value = savedTheme;
     }
@@ -51,7 +51,7 @@ class ThemeController extends GetxController {
 
   // Update theme when _isDarkMode changes
   void _updateTheme(bool isDark) {
-    print('Updating theme: isDarkMode = $isDark');
+    debugPrint('Updating theme: isDarkMode = $isDark');
     Get.changeThemeMode(isDark ? ThemeMode.dark : ThemeMode.light);
     _storage.write(_key, isDark);
   }
@@ -64,7 +64,7 @@ class ThemeController extends GetxController {
 
   // Set specific theme
   void setTheme(bool isDark) {
-    print('Setting theme: isDarkMode = $isDark');
+    debugPrint('Setting theme: isDarkMode = $isDark');
     _isDarkMode.value = isDark;
   }
 }

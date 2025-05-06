@@ -271,12 +271,7 @@ class HomeScreen extends StatelessWidget {
         return Column(
           children:
               featuredProjects
-                  .map(
-                    (project) => Padding(
-                      padding: const EdgeInsets.only(bottom: 24),
-                      child: ProjectCard(project: project),
-                    ),
-                  )
+                  .map((project) => ProjectCard(project: project))
                   .toList(),
         );
       }

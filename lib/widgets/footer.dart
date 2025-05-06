@@ -53,7 +53,6 @@ class Footer extends StatelessWidget {
             ),
           ],
         ),
-        Image.asset("assets/images/logo.png", width: 24, height: 14),
         const SizedBox(height: 20),
         // Social media icons
         Row(
@@ -114,7 +113,6 @@ class Footer extends StatelessWidget {
                 ),
               ],
             ),
-            Image.asset("assets/images/logo.png", width: 24, height: 14),
           ],
         ),
         // Social media icons

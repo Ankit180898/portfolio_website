@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:portfolio_website/config/constants.dart';
 import 'package:portfolio_website/config/theme.dart';
 import 'package:portfolio_website/widgets/dotted_line.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -35,22 +36,32 @@ class _ResourcesScreenState extends State<ResourcesScreen> {
             // Main content
             Expanded(
               child: SingleChildScrollView(
-                child: Responsive.responsiveContainer(
-                  context: context,
-                  child: Padding(
-                    padding: Responsive.responsivePadding(context),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const SizedBox(height: 40),
-                        _buildHeader(context),
-                        const SizedBox(height: 40),
-                        _buildCategories(context),
-                        const SizedBox(height: 60),
-                        _buildBlenderFilesSection(context),
-                        const SizedBox(height: 80),
-                        const Footer(),
-                      ],
+                child: Center(
+                  child: SizedBox(
+                    width:
+                        Responsive.isMobile(context)
+                            ? MediaQuery.of(context).size.width
+                            : AppLayout.maxContentWidth,
+                    child: Padding(
+                      padding:
+                          Responsive.isMobile(context)
+                              ? EdgeInsets.symmetric(
+                                horizontal: AppLayout.paddingMD,
+                              )
+                              : EdgeInsets.symmetric(horizontal: 0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const SizedBox(height: 40),
+                          _buildHeader(context),
+                          const SizedBox(height: 40),
+                          _buildCategories(context),
+                          const SizedBox(height: 60),
+                          _buildBlenderFilesSection(context),
+                          const SizedBox(height: 80),
+                          const Footer(),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -284,4 +295,3 @@ class _ResourcesScreenState extends State<ResourcesScreen> {
     }
   }
 }
-

@@ -19,7 +19,7 @@ class NavBar extends StatelessWidget {
     // Use Obx to listen to theme changes
     return Obx(() {
       final isDark = controller.isDarkMode;
-      print('NavBar rebuilding with isDarkMode = $isDark');
+      debugPrint('NavBar rebuilding with isDarkMode = $isDark');
 
       if (isMobile) {
         return _buildMobileNav(context, controller, isDark);
@@ -157,9 +157,7 @@ class NavBar extends StatelessWidget {
       child: SizedBox(
         width: 48,
         height: 32,
-        child: Image.asset('assets/images/logo.png',
-        color: logoColor,
-        ),
+        child: Image.asset('assets/images/logo.png', color: logoColor),
       ),
     );
   }
@@ -168,7 +166,7 @@ class NavBar extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         controller.toggleTheme(); // Ensure this triggers the theme change
-        print('Theme toggled to: ${controller.isDarkMode}'); // Debugging
+        debugPrint('Theme toggled to: ${controller.isDarkMode}'); // Debugging
       },
       child: Icon(
         isDark ? Icons.dark_mode_outlined : Icons.light_mode_outlined,
@@ -212,7 +210,7 @@ class NavBar extends StatelessWidget {
   void _showMobileMenu(BuildContext context, ThemeController controller) {
     // Get the current theme mode
     final isDark = controller.isDarkMode;
-    print('Opening mobile menu with isDarkMode = $isDark');
+    debugPrint('Opening mobile menu with isDarkMode = $isDark');
 
     showModalBottomSheet(
       context: context,
