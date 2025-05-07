@@ -58,7 +58,7 @@ class HomeScreen extends StatelessWidget {
                             AppRoutes.works,
                           ),
                           const SizedBox(height: 40),
-                          _buildProjectsGrid(context, projectsController),
+                          _buildProjects(context, projectsController),
                           const SizedBox(height: 80),
                           _buildSectionHeader(
                             context,
@@ -243,13 +243,39 @@ class HomeScreen extends StatelessWidget {
             style: TextStyle(
               fontFamily: AppTheme.fontFamily,
               fontSize: 14,
-              fontWeight: AppTheme.regular,
-              color: themeController.textMutedColor,
+              fontWeight: AppTheme.medium,
+              color: themeController.textPrimaryColor,
             ),
           ),
         ),
       ],
     );
+  }
+
+  Widget _buildProjects(BuildContext context, ProjectsController controller) {
+    final width = MediaQuery.of(context).size.width;
+    final isMobile = width < AppBreakpoints.md;
+
+    // Use list view for mobile and grid for desktop
+    if (isMobile) {
+      return _buildProjectsList(controller);
+    } else {
+      return _buildProjectsGrid(context, controller);
+    }
+  }
+
+  Widget _buildProjectsList(ProjectsController controller) {
+    return Obx(() {
+      final featuredProjects = controller.featuredProjects.take(3).toList();
+      return ListView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: featuredProjects.length,
+        itemBuilder: (context, index) {
+          return ProjectCard(project: featuredProjects[index]);
+        },
+      );
+    });
   }
 
   Widget _buildProjectsGrid(
@@ -262,23 +288,13 @@ class HomeScreen extends StatelessWidget {
 
     return Obx(() {
       final featuredProjects = controller.featuredProjects.take(3).toList();
-
       if (featuredProjects.isEmpty) {
         return const Center(child: Text("No projects available"));
       }
 
-      if (isMobile) {
-        return Column(
-          children:
-              featuredProjects
-                  .map((project) => ProjectCard(project: project))
-                  .toList(),
-        );
-      }
-
       return LayoutBuilder(
         builder: (context, constraints) {
-          final columnCount = isTablet ? 2 : 3;
+          final columnCount = isTablet ? 3 : 3;
           final spacing = isTablet ? 24.0 : 48.0;
           final itemWidth =
               (constraints.maxWidth - (spacing * (columnCount - 1))) /
@@ -286,13 +302,12 @@ class HomeScreen extends StatelessWidget {
 
           return Wrap(
             spacing: spacing,
-            runSpacing: 32,
+            runSpacing: spacing,
             children:
                 featuredProjects
                     .map(
                       (project) => SizedBox(
                         width: itemWidth,
-                        height: 280,
                         child: ProjectCard(project: project),
                       ),
                     )
