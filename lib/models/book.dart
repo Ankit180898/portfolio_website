@@ -24,14 +24,15 @@ class Book {
   });
 
   String getImageUrl() {
-    // If image URL is explicitly provided, return it
+    // Use imageUrl if provided
     if (imageUrl != null && imageUrl!.isNotEmpty) {
       return imageUrl!;
     }
 
-    // If ISBN is available, use Open Library Cover API
-    if (isbn != null && isbn!.isNotEmpty) {
-      return 'https://covers.openlibrary.org/b/isbn/$isbn-L.jpg';
+    // Use OpenLibrary only for valid ISBN-10 or ISBN-13
+    final isbnPattern = RegExp(r'^\d{9}[\dXx]$|^\d{13}$');
+    if (isbn != null && isbnPattern.hasMatch(isbn!)) {
+      return 'https://covers.openlibrary.org/b/isbn/$isbn-L.jpg?default=false';
     }
 
     // Fallback to a generic cover image using author and title
@@ -48,7 +49,7 @@ class TldrPoint {
   TldrPoint({required this.emoji, required this.text});
 }
 
-// Example book list - with fixed image handling
+// Example book list - with fixed image handling and corrected ISBNs
 final List<Book> books = [
   Book(
     title: "Feel Good Productivity",
@@ -56,7 +57,7 @@ final List<Book> books = [
     date: "31 OCT 2023",
     rating: 5.0,
     readTimeMinutes: 35,
-    isbn: "184794373X", // Added ISBN
+    isbn: "9781847943736", // Corrected ISBN
     tldrPoints: [
       TldrPoint(
         emoji: "🚀",
@@ -80,7 +81,7 @@ final List<Book> books = [
     date: "03 DEC 2023",
     rating: 5.0,
     readTimeMinutes: 40,
-    isbn: "1838858636", // Added ISBN
+    isbn: "9781838858636", // Added full ISBN-13
     tldrPoints: [
       TldrPoint(
         emoji: "🎨",
@@ -107,7 +108,7 @@ final List<Book> books = [
     date: "05 AUG 2023",
     rating: 5.0,
     readTimeMinutes: 60,
-    isbn: "1451648537", // Added ISBN
+    isbn: "9781451648539", // Corrected to full ISBN-13
     tldrPoints: [
       TldrPoint(
         emoji: "💡",
@@ -135,7 +136,7 @@ final List<Book> books = [
     date: "15 JAN 2024",
     rating: 4.5,
     readTimeMinutes: 45,
-    isbn: "1847941834", // Added ISBN
+    isbn: "9781847941831", // Corrected to full ISBN-13
     tldrPoints: [
       TldrPoint(
         emoji: "🧠",
@@ -169,7 +170,7 @@ final List<Book> books = [
     date: "22 FEB 2024",
     rating: 5.0,
     readTimeMinutes: 50,
-    isbn: "B08RMSHYGG", // Added ISBN
+    isbn: "B08RMSHYGG", // Keeping ASIN as it's an e-book
     tldrPoints: [
       TldrPoint(
         emoji: "🧰",
@@ -197,14 +198,13 @@ final List<Book> books = [
     bookLink:
         "https://www.amazon.co.uk/Staff-Engineer-Leadership-beyond-management-ebook/dp/B08RMSHYGG",
   ),
-  // Continuing the rest of the books with ISBNs
   Book(
     title: "Think Again",
     author: "Adam Grant",
     date: "05 MAR 2024",
     rating: 4.5,
     readTimeMinutes: 40,
-    isbn: "0753553880", // Added ISBN
+    isbn: "9780753553886", // Corrected to full ISBN-13
     tldrPoints: [
       TldrPoint(
         emoji: "🤔",
@@ -238,7 +238,7 @@ final List<Book> books = [
     date: "12 APR 2024",
     rating: 4.5,
     readTimeMinutes: 38,
-    isbn: "0857197681", // Added ISBN
+    isbn: "9780857197689", // Corrected to full ISBN-13
     tldrPoints: [
       TldrPoint(
         emoji: "💰",
@@ -272,7 +272,7 @@ final List<Book> books = [
     date: "10 MAY 2024",
     rating: 5.0,
     readTimeMinutes: 65,
-    isbn: "1449373321", // Added ISBN
+    isbn: "9781449373320", // Corrected to full ISBN-13
     tldrPoints: [
       TldrPoint(
         emoji: "🗄️",
@@ -306,7 +306,7 @@ final List<Book> books = [
     date: "22 JUN 2024",
     rating: 4.0,
     readTimeMinutes: 42,
-    isbn: "1633438430", // Added ISBN
+    isbn: "9781804611753", // Corrected ISBN
     tldrPoints: [
       TldrPoint(
         emoji: "👥",
@@ -332,7 +332,7 @@ final List<Book> books = [
     notes:
         "A practical guide for developers transitioning to management roles. The book offers actionable advice on building and leading high-performing engineering teams.",
     bookLink:
-        "https://www.amazon.co.uk/Think-Like-Software-Engineering-Manager/dp/1633438430",
+        "https://www.amazon.co.uk/Think-Like-Software-Engineering-Manager-ebook/dp/B0BVSXB5W7",
   ),
   Book(
     title: "Lead Developer Career Guide",
@@ -340,7 +340,7 @@ final List<Book> books = [
     date: "18 NOV 2024",
     rating: 4.5,
     readTimeMinutes: 38,
-    isbn: "1092426042", // Added ISBN
+    isbn: "9781092426046", // Corrected to full ISBN-13
     tldrPoints: [
       TldrPoint(
         emoji: "🧠",

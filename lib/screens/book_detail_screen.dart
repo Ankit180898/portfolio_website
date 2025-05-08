@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -341,50 +342,111 @@ class BookDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildBookCover() {
-    // If there's a valid imageUrl, use it
-    if (book.imageUrl != null && book.imageUrl!.isNotEmpty) {
-      return Hero(
-        tag: book.title,
-        child: Image.network(
-          book.imageUrl!,
-          fit: BoxFit.cover,
-          errorBuilder: (context, error, stackTrace) {
-            return _buildPlaceholder();
-          },
-        ),
-      );
-    } else {
-      return _buildPlaceholder();
-    }
+  Widget _buildBookCover({double? height}) {
+    // Ensure the image URL is set
+    final imageUrl = book.getImageUrl();
+
+    // Use CachedNetworkImage for better performance with network images
+    return Hero(
+      tag: 'book_${book.title}',
+      child: CachedNetworkImage(
+        imageUrl: imageUrl,
+        fit: BoxFit.cover,
+        width: double.infinity,
+        height: height,
+        placeholder: (context, url) => _buildLoadingPlaceholder(),
+        errorWidget: (context, url, error) => _buildCustomCover(),
+      ),
+    );
   }
 
-  Widget _buildPlaceholder() {
-    // Create a placeholder with title and author
+  Widget _buildLoadingPlaceholder() {
+    final themeController = Get.find<ThemeController>();
+
     return Container(
-      color: Colors.grey[800],
+      width: double.infinity,
+      height: 220,
+      color:
+          themeController.isDarkMode
+              ? const Color(0xFF333333)
+              : const Color(0xFFEEEEEE),
+      child: Center(
+        child: CircularProgressIndicator(
+          color: themeController.isDarkMode ? Colors.white : Colors.grey[700],
+        ),
+      ),
+    );
+  }
+
+  // Instead of a basic placeholder, create a stylized book cover
+  Widget _buildCustomCover() {
+    Get.find<ThemeController>();
+
+    // Generate a consistent color based on the book title
+    final int titleHash = book.title.hashCode;
+    final List<Color> coverColors = [
+      Colors.blue[300]!,
+      Colors.green[300]!,
+      Colors.amber[300]!,
+      Colors.red[300]!,
+      Colors.purple[300]!,
+      Colors.teal[300]!,
+      Colors.orange[300]!,
+      Colors.indigo[300]!,
+    ];
+
+    final Color coverColor = coverColors[titleHash.abs() % coverColors.length];
+    final Color textColor = Colors.white;
+
+    return Container(
+      width: double.infinity,
+      height: 220,
+      decoration: BoxDecoration(
+        color: coverColor,
+        borderRadius: BorderRadius.circular(8),
+      ),
       child: Center(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(12.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              // Add author at top
+              Text(
+                book.author.toUpperCase(),
+                style: TextStyle(
+                  color: textColor.withOpacity(0.7),
+                  fontWeight: FontWeight.w500,
+                  fontSize: 12,
+                ),
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+              const Spacer(),
+
+              // Title in center
               Text(
                 book.title,
-                style: const TextStyle(
-                  color: Colors.white,
+                style: TextStyle(
+                  color: textColor,
                   fontWeight: FontWeight.bold,
-                  fontSize: 16,
+                  fontSize: 22,
                 ),
                 textAlign: TextAlign.center,
                 maxLines: 4,
                 overflow: TextOverflow.ellipsis,
               ),
-              const SizedBox(height: 8),
-              Text(
-                'by ${book.author}',
-                style: const TextStyle(color: Colors.white70, fontSize: 14),
-                textAlign: TextAlign.center,
+              const Spacer(),
+
+              // Add a decorative element
+              Container(
+                width: 40,
+                height: 5,
+                decoration: BoxDecoration(
+                  color: textColor.withOpacity(0.7),
+                  borderRadius: BorderRadius.circular(10),
+                ),
               ),
             ],
           ),
