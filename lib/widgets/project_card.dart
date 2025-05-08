@@ -49,6 +49,7 @@ class ProjectCard extends StatelessWidget {
                 aspectRatio: 1, // Square aspect ratio
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(AppLayout.borderRadiusMD),
+                  clipBehavior: Clip.antiAlias,
                   child: Container(
                     decoration:
                         project.title == "Notion Icons 3D"
@@ -121,7 +122,7 @@ class ProjectCard extends StatelessWidget {
                   height: 1.4,
                   color: themeController.textSecondaryColor,
                 ),
-                maxLines: 2,
+                maxLines: 3,
                 overflow: TextOverflow.ellipsis,
               ),
             ],
@@ -153,7 +154,13 @@ class ProjectCard extends StatelessWidget {
                 child: Container(
                   width: 80,
                   height: 80,
-                  decoration: BoxDecoration(color: cardColor),
+                  decoration: BoxDecoration(
+                    color: cardColor,
+                    border: Border.all(
+                      width: 1,
+                      color: AppTheme.borderColor(themeController.isDarkMode),
+                    ),
+                  ),
                   child: Center(child: getProjectIcon(project.title, size: 40)),
                 ),
               ),
@@ -214,7 +221,7 @@ class ProjectCard extends StatelessWidget {
                         height: 1.4,
                         color: themeController.textSecondaryColor,
                       ),
-                      maxLines: 2,
+                      maxLines: 3,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ],

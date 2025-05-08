@@ -65,7 +65,7 @@ final List<Project> allProjects = [
   Project(
     title: "Sheqonomi",
     description:
-        "Discover the difference when millennials and GENZ women curate content that will impact billions. Our world has certainly changed.",
+        "Empowering women's voices with a podcasting platform. Live on Play Store.",
     imageUrl: "2.png",
     liveLink: "https://play.google.com/store/apps/details?id=com.sheqonomi",
     technologies: ["Flutter", "Firebase", "Playstore"],
@@ -74,7 +74,7 @@ final List<Project> allProjects = [
   Project(
     title: "Home|Home 4IM",
     description:
-        "Home is a social networking app designed to support and connect individuals starting their new life in a foreign country. Our mission is to create a welcoming community where users can share experiences, ask questions, and find helpful resources.",
+        "A social networking app to support individuals transitioning to life in a new country.",
     imageUrl: "3.png",
     liveLink:
         "https://play.google.com/store/apps/details?id=com.home4im&hl=en_US",
@@ -84,7 +84,7 @@ final List<Project> allProjects = [
   Project(
     title: "MonkeyType Clone",
     description:
-        "A typing speed tester inspired by Monkeytype, built using Flutter Web. It features a dark theme, real-time typing accuracy with color-coded feedback, customizable test modes (words, punctuation, quotes), and a detailed results summary. The app aims to help users improve their typing speed and accuracy in an engaging way.",
+        "Level up your typing speed. Real-time accuracy, customizable tests.",
     imageUrl: "12.webp",
     liveLink: "https://monkeytypes.netlify.app/",
     githubLink: "https://github.com/Ankit180898?tab=repositories",
@@ -94,7 +94,7 @@ final List<Project> allProjects = [
   Project(
     title: "Home|Website",
     description:
-        "Home is a social networking app designed to support and connect individuals starting their new life in a foreign country. Our mission is to create a welcoming community where users can share experiences, ask questions, and find helpful resources.",
+        "Connecting individuals in new countries. Discover a welcoming community online.",
     imageUrl: "6.webp",
     liveLink: "https://home4im.vercel.app/",
     technologies: ["Flutter", "Firebase", "Vercel"],
@@ -103,7 +103,7 @@ final List<Project> allProjects = [
   Project(
     title: "Spendify",
     description:
-        "An Expense Tracker App to manage your daily expenses. Build using Supabase and Flutter.",
+        "Master your finances. Track expenses with ease using Supabase and Flutter.",
     imageUrl: "Spendify.png",
     githubLink: "https://github.com/Ankit180898/spendify",
     technologies: ["Flutter", "Supabase"],
@@ -112,7 +112,7 @@ final List<Project> allProjects = [
   Project(
     title: "BlingBill",
     description:
-        "BlingBill is a sleek jewelry inventory and billing app that helps jewelers manage products, track sales, and generate invoices effortlessly.",
+        "Jewelers, manage your inventory and billing without the stress.",
     imageUrl: "11.webp",
     githubLink: "https://github.com/Ankit180898/blingbill",
     technologies: ["Flutter", "GetX", "Pdf"],
@@ -121,7 +121,7 @@ final List<Project> allProjects = [
   Project(
     title: "Vision AI",
     description:
-        "a mobile app that transforms text prompts into AI-generated images.",
+        " Unleash your imagination. Turn text into stunning AI-generated art.",
     imageUrl: "10.webp",
     githubLink: "https://github.com/Ankit180898/text_to_image",
     technologies: ["Flutter", "GetX", "Hugging Face"],
@@ -130,7 +130,7 @@ final List<Project> allProjects = [
 
   Project(
     title: "Flight Tracker",
-    description: "a mobile app that tracks flight status and delays.",
+    description: "Track flights. Know the status. Get it done.",
     imageUrl: "10.webp",
     githubLink: "https://github.com/Ankit180898/SkyPulse",
     technologies: ["Flutter", "GetX", "Supabase", "Aviation API"],
@@ -139,7 +139,7 @@ final List<Project> allProjects = [
   Project(
     title: "Mediflow",
     description:
-        "A chat assistant for patients to manage their appointments and get knowledge about their symptoms.",
+        "Your personal health assistant. Manage appointments, understand symptoms.",
     imageUrl: "10.webp",
     githubLink: "https://github.com/Ankit180898/mediflow",
     technologies: ["Flutter", "GetX", "ChatGPT API"],
@@ -148,7 +148,7 @@ final List<Project> allProjects = [
 
   Project(
     title: "BlogD",
-    description: "BlogD is a blogging app",
+    description: "A simple blogging app. Share your stories.",
     imageUrl: "7.png",
     githubLink: "https://github.com/Ankit180898/blog_app",
     technologies: ["Flutter", "Supabase"],
@@ -157,7 +157,7 @@ final List<Project> allProjects = [
   Project(
     title: "FlutterStack",
     description:
-        "Curated resources for Flutter Developers. A community-driven platform.",
+        "The best Flutter resources, all in one place. Community-driven.",
     imageUrl: "FlutterStack.png",
     githubLink: "https://github.com/Ankit180898/flutter_resource_gallery",
     liveLink: "https://flutterstack.netlify.app/",
@@ -166,8 +166,7 @@ final List<Project> allProjects = [
   ),
   Project(
     title: "Stock Search",
-    description:
-        "A Flutter application that provides stock price and financial information, helping users make informed trading and investment decisions.",
+    description: "Make smart investments. Real-time stock data.",
     imageUrl: "9.webp",
     githubLink: "https://github.com/Ankit180898/stock_search",
     technologies: ["Flutter", "GetX"],
@@ -175,8 +174,7 @@ final List<Project> allProjects = [
   ),
   Project(
     title: "News App",
-    description:
-        "The News App is a Flutter-based application that fetches and displays the latest news articles using NewsAPI. The app follows the MVVM architecture with GetX for state management",
+    description: "Get the latest news. Built with Flutter and GetX.",
     imageUrl: "8.webp",
     githubLink: "https://github.com/Ankit180898/news_app",
     technologies: ["Flutter", "GetX", "NewsAPI"],
@@ -184,8 +182,7 @@ final List<Project> allProjects = [
   ),
   Project(
     title: "Artwork Images",
-    description:
-        "Artwork Images is a platform where you can find images of some of best artists.",
+    description: "Discover art from the best artists.",
     imageUrl: "Artworks_Images.png",
     githubLink: "https://github.com/yourusername/ayehigh",
     liveLink: "https://artwork-images.netlify.app/",

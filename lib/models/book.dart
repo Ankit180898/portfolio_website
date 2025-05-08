@@ -8,6 +8,7 @@ class Book {
   final List<TldrPoint> tldrPoints;
   final String? notes;
   final String? bookLink;
+  final String? isbn; // Added ISBN field
 
   Book({
     required this.title,
@@ -19,18 +20,24 @@ class Book {
     required this.tldrPoints,
     this.notes,
     this.bookLink,
+    this.isbn,
   });
 
   String getImageUrl() {
+    // If image URL is explicitly provided, return it
     if (imageUrl != null && imageUrl!.isNotEmpty) {
       return imageUrl!;
     }
 
-    // Format title for Open Library (spaces as underscores)
-    String formattedTitle = title.toLowerCase().replaceAll(' ', '_');
+    // If ISBN is available, use Open Library Cover API
+    if (isbn != null && isbn!.isNotEmpty) {
+      return 'https://covers.openlibrary.org/b/isbn/$isbn-L.jpg';
+    }
 
-    // Open Library Cover API (no API key needed)
-    return "https://covers.openlibrary.org/b/title/$formattedTitle-M.jpg?default=false";
+    // Fallback to a generic cover image using author and title
+    String formattedTitle = title.toLowerCase().replaceAll(' ', '+');
+    String formattedAuthor = author.toLowerCase().replaceAll(' ', '+');
+    return 'https://via.placeholder.com/400x600.png?text=$formattedAuthor+-+$formattedTitle';
   }
 }
 
@@ -49,6 +56,7 @@ final List<Book> books = [
     date: "31 OCT 2023",
     rating: 5.0,
     readTimeMinutes: 35,
+    isbn: "184794373X", // Added ISBN
     tldrPoints: [
       TldrPoint(
         emoji: "🚀",
@@ -72,6 +80,7 @@ final List<Book> books = [
     date: "03 DEC 2023",
     rating: 5.0,
     readTimeMinutes: 40,
+    isbn: "1838858636", // Added ISBN
     tldrPoints: [
       TldrPoint(
         emoji: "🎨",
@@ -98,6 +107,7 @@ final List<Book> books = [
     date: "05 AUG 2023",
     rating: 5.0,
     readTimeMinutes: 60,
+    isbn: "1451648537", // Added ISBN
     tldrPoints: [
       TldrPoint(
         emoji: "💡",
@@ -119,13 +129,13 @@ final List<Book> books = [
     bookLink:
         "https://www.amazon.co.uk/Steve-Jobs-Walter-Isaacson/dp/1451648537",
   ),
-  // Added more books below
   Book(
     title: "Atomic Habits",
     author: "James Clear",
     date: "15 JAN 2024",
     rating: 4.5,
     readTimeMinutes: 45,
+    isbn: "1847941834", // Added ISBN
     tldrPoints: [
       TldrPoint(
         emoji: "🧠",
@@ -159,6 +169,7 @@ final List<Book> books = [
     date: "22 FEB 2024",
     rating: 5.0,
     readTimeMinutes: 50,
+    isbn: "B08RMSHYGG", // Added ISBN
     tldrPoints: [
       TldrPoint(
         emoji: "🧰",
@@ -186,12 +197,14 @@ final List<Book> books = [
     bookLink:
         "https://www.amazon.co.uk/Staff-Engineer-Leadership-beyond-management-ebook/dp/B08RMSHYGG",
   ),
+  // Continuing the rest of the books with ISBNs
   Book(
     title: "Think Again",
     author: "Adam Grant",
     date: "05 MAR 2024",
     rating: 4.5,
     readTimeMinutes: 40,
+    isbn: "0753553880", // Added ISBN
     tldrPoints: [
       TldrPoint(
         emoji: "🤔",
@@ -225,6 +238,7 @@ final List<Book> books = [
     date: "12 APR 2024",
     rating: 4.5,
     readTimeMinutes: 38,
+    isbn: "0857197681", // Added ISBN
     tldrPoints: [
       TldrPoint(
         emoji: "💰",
@@ -258,6 +272,7 @@ final List<Book> books = [
     date: "10 MAY 2024",
     rating: 5.0,
     readTimeMinutes: 65,
+    isbn: "1449373321", // Added ISBN
     tldrPoints: [
       TldrPoint(
         emoji: "🗄️",
@@ -291,6 +306,7 @@ final List<Book> books = [
     date: "22 JUN 2024",
     rating: 4.0,
     readTimeMinutes: 42,
+    isbn: "1633438430", // Added ISBN
     tldrPoints: [
       TldrPoint(
         emoji: "👥",
@@ -324,6 +340,7 @@ final List<Book> books = [
     date: "18 NOV 2024",
     rating: 4.5,
     readTimeMinutes: 38,
+    isbn: "1092426042", // Added ISBN
     tldrPoints: [
       TldrPoint(
         emoji: "🧠",

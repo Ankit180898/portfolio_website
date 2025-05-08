@@ -39,49 +39,51 @@ class _BookNotesScreenState extends State<BookNotesScreen> {
     final width = MediaQuery.of(context).size.width;
     final isMobile = width < AppBreakpoints.md;
 
-    return Obx(() => Scaffold(
-          backgroundColor: themeController.backgroundColor,
-          body: Column(
-            children: [
-              // Navigation bar
-              const NavBar(currentIndex: 2),
-        
-              // Main content
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Center(
-                    child: Container(
-                      width: isMobile ? width : AppLayout.maxContentWidth,
-                      padding: EdgeInsets.symmetric(
-                        horizontal: isMobile ? AppLayout.paddingMD : 0,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          // Header section
-                          const SizedBox(height: 40),
-                          _buildHeader(context, themeController),
-                          const SizedBox(height: 40),
-        
-                          // Search bar
-                          _buildSearchBar(context, themeController),
-                          const SizedBox(height: 40),
-        
-                          // Books grid
-                          _buildBooksGrid(context),
-        
-                          // Footer
-                          const SizedBox(height: 80),
-                          const Footer(),
-                        ],
-                      ),
+    return Obx(
+      () => Scaffold(
+        backgroundColor: themeController.backgroundColor,
+        body: Column(
+          children: [
+            // Navigation bar
+            const NavBar(currentIndex: 2),
+
+            // Main content
+            Expanded(
+              child: SingleChildScrollView(
+                child: Center(
+                  child: Container(
+                    width: isMobile ? width : AppLayout.maxContentWidth,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: isMobile ? AppLayout.paddingMD : 0,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        // Header section
+                        const SizedBox(height: 40),
+                        _buildHeader(context, themeController),
+                        const SizedBox(height: 40),
+
+                        // Search bar
+                        _buildSearchBar(context, themeController),
+                        const SizedBox(height: 40),
+
+                        // Books grid
+                        _buildBooksGrid(context),
+
+                        // Footer
+                        const SizedBox(height: 80),
+                        const Footer(),
+                      ],
                     ),
                   ),
                 ),
               ),
-            ],
-          ),
-        ));
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget _buildHeader(BuildContext context, ThemeController themeController) {
@@ -139,9 +141,10 @@ class _BookNotesScreenState extends State<BookNotesScreen> {
       height: 48,
       width: double.infinity,
       decoration: BoxDecoration(
-        color: themeController.isDarkMode
-            ? const Color(0xFF222222)
-            : AppTheme.lightSurface,
+        color:
+            themeController.isDarkMode
+                ? const Color(0xFF222222)
+                : AppTheme.lightSurface,
         borderRadius: BorderRadius.circular(8),
         border: Border.all(color: themeController.borderColor, width: 1),
       ),
@@ -220,7 +223,8 @@ class _BookNotesScreenState extends State<BookNotesScreen> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => BookDetailScreen(book: bookList[index]),
+                    builder:
+                        (context) => BookDetailScreen(book: bookList[index]),
                   ),
                 );
               },
@@ -229,32 +233,33 @@ class _BookNotesScreenState extends State<BookNotesScreen> {
         },
       );
     } else {
-    
       final double gridWidth = AppLayout.maxContentWidth;
       const int columns = 3;
-      const double spacing = 24;
+      const double spacing = 20;
 
-      final double itemWidth = (gridWidth - (spacing * (columns - 1))) / columns;
+      final double itemWidth =
+          (gridWidth - (spacing * (columns - 1))) / columns;
 
       return Wrap(
         spacing: spacing,
         runSpacing: 40,
-        children: bookList.map((book) {
-          return SizedBox(
-            width: itemWidth,
-            child: BookCard(
-              book: book,
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => BookDetailScreen(book: book),
-                  ),
-                );
-              },
-            ),
-          );
-        }).toList(),
+        children:
+            bookList.map((book) {
+              return SizedBox(
+                width: itemWidth,
+                child: BookCard(
+                  book: book,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => BookDetailScreen(book: book),
+                      ),
+                    );
+                  },
+                ),
+              );
+            }).toList(),
       );
     }
   }

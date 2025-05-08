@@ -199,8 +199,8 @@ class NavBar extends StatelessWidget {
         title,
         style: TextStyle(
           fontFamily: AppTheme.fontFamily,
-          fontSize: 15,
-          fontWeight: isActive ? AppTheme.bold : AppTheme.medium,
+          fontSize: 16,
+          fontWeight: isActive ? AppTheme.bold : AppTheme.regular,
           color: isActive ? textPrimary : textPrimary.withOpacity(0.7),
         ),
       ),
@@ -330,46 +330,10 @@ class NavBar extends StatelessWidget {
         style: TextStyle(
           fontFamily: AppTheme.fontFamily,
           fontSize: 24,
-          fontWeight: isActive ? AppTheme.bold : AppTheme.medium,
+          fontWeight: isActive ? AppTheme.bold : AppTheme.regular,
           color: isActive ? textPrimary : textPrimary.withOpacity(0.7),
         ),
       ),
     );
   }
-}
-
-// Custom painter for 'A' (upright triangle) and 'K' (left-pointing triangle)
-class AKGeometricLogoPainter extends CustomPainter {
-  final Color color;
-  AKGeometricLogoPainter(this.color);
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint =
-        Paint()
-          ..color = color
-          ..style = PaintingStyle.fill;
-
-    // 'A' - Upright triangle (left)
-    final aPath = Path();
-    aPath.moveTo(size.width * 0.08, size.height * 0.95); // Bottom left
-    aPath.lineTo(size.width * 0.20, size.height * 0.05); // Top
-    aPath.lineTo(size.width * 0.32, size.height * 0.95); // Bottom right
-    aPath.close();
-    canvas.drawPath(aPath, paint);
-
-    // 'K' - Left-pointing triangle (right)
-    final kPath = Path();
-    kPath.moveTo(size.width * 0.44, size.height * 0.18); // Top right
-    kPath.lineTo(size.width * 0.44, size.height * 0.82); // Bottom right
-    kPath.lineTo(
-      size.width * 0.32,
-      size.height * 0.5,
-    ); // Middle left (points left)
-    kPath.close();
-    canvas.drawPath(kPath, paint);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }

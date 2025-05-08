@@ -218,7 +218,7 @@ class HomeScreen extends StatelessWidget {
           style: TextStyle(
             fontFamily: AppTheme.fontFamily,
             fontSize: 14,
-            fontWeight: AppTheme.medium,
+            fontWeight: AppTheme.semiBold,
             letterSpacing: 1.2,
             color: themeController.textMutedColor,
           ),
@@ -232,6 +232,7 @@ class HomeScreen extends StatelessWidget {
         TextButton(
           onPressed: () => Get.toNamed(route),
           style: TextButton.styleFrom(
+            splashFactory: NoSplash.splashFactory,
             foregroundColor: themeController.textMutedColor,
             backgroundColor: Colors.transparent,
             padding: EdgeInsets.zero,
@@ -243,7 +244,7 @@ class HomeScreen extends StatelessWidget {
             style: TextStyle(
               fontFamily: AppTheme.fontFamily,
               fontSize: 14,
-              fontWeight: AppTheme.medium,
+              fontWeight: AppTheme.regular,
               color: themeController.textPrimaryColor,
             ),
           ),
