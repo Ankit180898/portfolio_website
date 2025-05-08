@@ -427,7 +427,7 @@ class AboutScreen extends StatelessWidget {
                               child: Text(job["company"] as String),
                             ),
                             const SizedBox(width: 4),
-                            Icon(
+                            FaIcon(
                               Icons.arrow_outward,
                               size: 16,
                               color: textColor,

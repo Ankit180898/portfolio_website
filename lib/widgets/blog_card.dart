@@ -54,7 +54,7 @@ class BlogCard extends StatelessWidget {
 
                     // Center icon or logo
                     Center(
-                      child: Icon(
+                      child: FaIcon(
                         _getIconForPost(blogPost.title),
                         size: 48,
                         color: Colors.white,

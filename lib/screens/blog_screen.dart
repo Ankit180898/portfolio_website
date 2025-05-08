@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import '../models/blog_post.dart';
 import '../widgets/blog_card.dart';
@@ -143,7 +144,7 @@ class _BlogScreenState extends State<BlogScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Row(
         children: [
-          Icon(Icons.search, color: themeController.textMutedColor, size: 20),
+          FaIcon(Icons.search, color: themeController.textMutedColor, size: 20),
           const SizedBox(width: 12),
           Expanded(
             child: TextField(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../models/book.dart';
 import '../config/theme.dart';
 import 'package:get/get.dart';
@@ -83,7 +84,7 @@ class BookCard extends StatelessWidget {
             // Rating
             Row(
               children: [
-                Icon(
+                FaIcon(
                   Icons.star,
                   size: 16,
                   color:
@@ -176,7 +177,7 @@ class BookCard extends StatelessWidget {
                     // Rating
                     Row(
                       children: [
-                        Icon(
+                        FaIcon(
                           Icons.star,
                           size: 18,
                           color:

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import '../controllers/theme_controller.dart';
 import '../config/constants.dart';
@@ -131,7 +132,7 @@ class NavBar extends StatelessWidget {
               // Menu Button
               IconButton(
                 onPressed: () => _showMobileMenu(context, controller),
-                icon: Icon(
+                icon: FaIcon(
                   Icons.menu,
                   size: 24,
                   color:
@@ -168,7 +169,7 @@ class NavBar extends StatelessWidget {
         controller.toggleTheme(); // Ensure this triggers the theme change
         debugPrint('Theme toggled to: ${controller.isDarkMode}'); // Debugging
       },
-      child: Icon(
+      child: FaIcon(
         isDark ? Icons.dark_mode_outlined : Icons.light_mode_outlined,
         size: 22,
         color: isDark ? AppTheme.darkTextPrimary : const Color(0xFF27272A),
@@ -234,7 +235,7 @@ class NavBar extends StatelessWidget {
                     // Close button
                     GestureDetector(
                       onTap: () => Navigator.pop(context),
-                      child: Icon(
+                      child: FaIcon(
                         Icons.close,
                         size: 24,
                         color:
@@ -252,7 +253,7 @@ class NavBar extends StatelessWidget {
                           Navigator.pop(context);
                         });
                       },
-                      child: Icon(
+                      child: FaIcon(
                         Icons.wb_sunny_outlined,
                         size: 22,
                         color:

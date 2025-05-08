@@ -468,7 +468,7 @@ class ResourceDetailScreen extends StatelessWidget {
             ),
             child:
                 goal.completed
-                    ? const Icon(Icons.check, size: 14, color: Colors.white)
+                    ? const FaIcon(Icons.check, size: 14, color: Colors.white)
                     : null,
           ),
           const SizedBox(width: 12),

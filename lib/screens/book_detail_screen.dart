@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import '../models/book.dart';
 import '../widgets/nav_bar.dart';
@@ -132,7 +133,7 @@ class BookDetailScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 8),
-            Icon(Icons.star, size: 16, color: const Color(0xFFFFB800)),
+            FaIcon(Icons.star, size: 16, color: const Color(0xFFFFB800)),
             const SizedBox(width: 4),
             Text(
               book.rating.toString(),

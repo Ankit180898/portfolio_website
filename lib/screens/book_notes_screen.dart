@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import '../models/book.dart';
 import '../widgets/book_card.dart';
@@ -155,7 +156,7 @@ class _BookNotesScreenState extends State<BookNotesScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Row(
         children: [
-          Icon(Icons.search, color: themeController.textMutedColor, size: 20),
+          FaIcon(Icons.search, color: themeController.textMutedColor, size: 20),
           const SizedBox(width: 12),
           Expanded(
             child: TextField(
