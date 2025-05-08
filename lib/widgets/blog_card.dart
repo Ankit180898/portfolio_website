@@ -82,7 +82,7 @@ class BlogCard extends StatelessWidget {
                 fontFamily: AppTheme.fontFamily,
                 fontSize: AppTypography.font16,
                 fontWeight: AppTheme.semiBold,
-                color: themeController.textPrimaryColor,
+                color: themeController.textPrimaryColor.withOpacity(0.8),
                 height: 1.2,
               ),
               maxLines: 1,

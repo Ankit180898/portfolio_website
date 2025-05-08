@@ -100,7 +100,7 @@ class _BlogScreenState extends State<BlogScreen> {
                 fontFamily: AppTheme.fontFamily,
                 fontWeight: AppTheme.bold,
                 fontSize: 36,
-                color: themeController.textPrimaryColor,
+                color: themeController.textPrimaryColor.withOpacity(0.8),
               ),
             ),
           ],
@@ -153,12 +153,12 @@ class _BlogScreenState extends State<BlogScreen> {
                   _searchQuery = value;
                 });
               },
-              cursorColor: themeController.textPrimaryColor,
+              cursorColor: themeController.textPrimaryColor.withOpacity(0.8),
               cursorWidth: 1,
               cursorRadius: const Radius.circular(1),
               style: TextStyle(
                 fontFamily: AppTheme.fontFamily,
-                color: themeController.textPrimaryColor,
+                color: themeController.textPrimaryColor.withOpacity(0.8),
                 fontSize: 15,
                 fontWeight: AppTheme.regular,
                 height: 1.5,

@@ -93,7 +93,7 @@ class BookDetailScreen extends StatelessWidget {
             fontFamily: AppTheme.fontFamily,
             fontWeight: AppTheme.bold,
             fontSize: 36,
-            color: themeController.textPrimaryColor,
+            color: themeController.textPrimaryColor.withOpacity(0.8),
           ),
           textAlign: TextAlign.center,
         ),
@@ -210,7 +210,7 @@ class BookDetailScreen extends StatelessWidget {
                 ),
               ),
               IconButton(
-                icon: Icon(
+                icon: FaIcon(
                   Icons.content_copy_outlined,
                   size: 20,
                   color:
@@ -324,7 +324,7 @@ class BookDetailScreen extends StatelessWidget {
               fontFamily: AppTheme.fontFamily,
               fontWeight: AppTheme.bold,
               fontSize: 20,
-              color: themeController.textPrimaryColor,
+              color: themeController.textPrimaryColor.withOpacity(0.8),
             ),
           ),
           const SizedBox(height: 16),

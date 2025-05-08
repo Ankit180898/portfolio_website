@@ -44,28 +44,6 @@ class AppBreakpoints {
 // Font families matching the reference website CSS
 class AppFonts {
   static const String primaryFontFamily = 'HankenGrotesk';
-
-  // System font fallbacks - matching the CSS var(--font-family-sans-serif)
-  static const List<String> systemFonts = [
-    '-apple-system',
-    'BlinkMacSystemFont',
-    'Segoe UI',
-    'Roboto',
-    'Helvetica Neue',
-    'Arial',
-    'Noto Sans',
-    'Liberation Sans',
-  ];
-
-  // Monospace font fallbacks from reference var(--font-family-monospace)
-  static const List<String> monospaceFonts = [
-    'SFMono-Regular',
-    'Menlo',
-    'Monaco',
-    'Consolas',
-    'Liberation Mono',
-    'Courier New',
-  ];
 }
 
 // Typography classes exactly matching the reference CSS

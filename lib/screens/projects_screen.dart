@@ -94,7 +94,7 @@ class ProjectsScreen extends StatelessWidget {
                 fontFamily: AppTheme.fontFamily,
                 fontSize: 48,
                 fontWeight: AppTheme.bold,
-                color: themeController.textPrimaryColor,
+                color: themeController.textPrimaryColor.withOpacity(0.8),
               ),
             ),
             const SizedBox(width: 8),

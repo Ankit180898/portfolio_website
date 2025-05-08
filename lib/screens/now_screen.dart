@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:portfolio_website/config/constants.dart';
 import 'package:portfolio_website/widgets/footer.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../controllers/theme_controller.dart';

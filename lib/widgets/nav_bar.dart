@@ -20,7 +20,7 @@ class NavBar extends StatelessWidget {
     // Use Obx to listen to theme changes
     return Obx(() {
       final isDark = controller.isDarkMode;
-      debugPrint('NavBar rebuilding with isDarkMode = $isDark');
+      // debugPrint('NavBar rebuilding with isDarkMode = $isDark');
 
       if (isMobile) {
         return _buildMobileNav(context, controller, isDark);
@@ -35,7 +35,6 @@ class NavBar extends StatelessWidget {
             margin: const EdgeInsets.symmetric(horizontal: 20),
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 0),
             decoration: BoxDecoration(
-              // Force specific colors based on theme mode
               color: isDark ? const Color(0xFF27272A) : const Color(0xFFF4F4F5),
               borderRadius: BorderRadius.circular(8),
             ),

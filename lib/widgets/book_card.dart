@@ -62,7 +62,9 @@ class BookCard extends StatelessWidget {
                 fontFamily: AppTheme.fontFamily,
                 fontWeight: AppTheme.semiBold,
                 fontSize: 18,
-                color: themeController.textPrimaryColor,
+                color: themeController.textPrimaryColor
+                    .withOpacity(0.8)
+                    .withOpacity(0.8),
               ),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
@@ -85,12 +87,11 @@ class BookCard extends StatelessWidget {
             Row(
               children: [
                 FaIcon(
-                  Icons.star,
+                  FontAwesomeIcons.star,
                   size: 16,
-                  color:
-                      themeController.isDarkMode
-                          ? Colors.yellow[700]
-                          : Colors.amber,
+                  color: themeController.textPrimaryColor
+                      .withOpacity(0.8)
+                      .withOpacity(0.8),
                 ),
                 const SizedBox(width: 4),
                 Text(
@@ -98,7 +99,7 @@ class BookCard extends StatelessWidget {
                   style: TextStyle(
                     fontFamily: AppTheme.fontFamily,
                     fontWeight: AppTheme.medium,
-                    fontSize: 14,
+                    fontSize: 16,
                     color: themeController.textSecondaryColor,
                   ),
                 ),
@@ -107,13 +108,20 @@ class BookCard extends StatelessWidget {
             const SizedBox(height: 4),
 
             // Date
-            Text(
-              book.date,
-              style: TextStyle(
-                fontFamily: AppTheme.fontFamily,
-                fontWeight: AppTheme.regular,
-                fontSize: 14,
-                color: themeController.textSecondaryColor,
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+              decoration: BoxDecoration(
+                color: themeController.surfaceColor,
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: Text(
+                book.date,
+                style: TextStyle(
+                  fontFamily: AppTheme.fontFamily,
+                  fontWeight: AppTheme.regular,
+                  fontSize: 14,
+                  color: themeController.textSecondaryColor,
+                ),
               ),
             ),
           ],
@@ -155,7 +163,9 @@ class BookCard extends StatelessWidget {
                         fontFamily: AppTheme.fontFamily,
                         fontWeight: AppTheme.semiBold,
                         fontSize: 20,
-                        color: themeController.textPrimaryColor,
+                        color: themeController.textPrimaryColor
+                            .withOpacity(0.8)
+                            .withOpacity(0.8),
                       ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
@@ -178,12 +188,11 @@ class BookCard extends StatelessWidget {
                     Row(
                       children: [
                         FaIcon(
-                          Icons.star,
-                          size: 18,
-                          color:
-                              themeController.isDarkMode
-                                  ? Colors.yellow[700]
-                                  : Colors.amber,
+                          FontAwesomeIcons.star,
+                          size: 16,
+                          color: themeController.textPrimaryColor
+                              .withOpacity(0.8)
+                              .withOpacity(0.8),
                         ),
                         const SizedBox(width: 4),
                         Text(
@@ -200,13 +209,23 @@ class BookCard extends StatelessWidget {
                     const SizedBox(height: 4),
 
                     // Date
-                    Text(
-                      book.date,
-                      style: TextStyle(
-                        fontFamily: AppTheme.fontFamily,
-                        fontWeight: AppTheme.regular,
-                        fontSize: 14,
-                        color: themeController.textSecondaryColor,
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 4,
+                        vertical: 2,
+                      ),
+                      decoration: BoxDecoration(
+                        color: themeController.surfaceColor,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Text(
+                        book.date,
+                        style: TextStyle(
+                          fontFamily: AppTheme.fontFamily,
+                          fontWeight: AppTheme.regular,
+                          fontSize: 14,
+                          color: themeController.textSecondaryColor,
+                        ),
                       ),
                     ),
                   ],
@@ -237,8 +256,8 @@ class BookCard extends StatelessWidget {
         width: double.infinity,
         height: height,
         placeholder: (context, url) => _buildLoadingPlaceholder(),
+
         errorWidget: (context, url, error) {
-          print("Error loading image for book ${book.title}: $error");
           return _buildCustomCover();
         },
       ),
@@ -270,16 +289,15 @@ class BookCard extends StatelessWidget {
     // Generate a consistent color based on the book title
     final int titleHash = book.title.hashCode.abs();
     final List<Color> coverColors = [
-      Colors.blue[700] ?? Colors.blue,
-      Colors.green[700] ?? Colors.green,
-      Colors.amber[700] ?? Colors.amber,
-      Colors.red[700] ?? Colors.red,
-      Colors.purple[700] ?? Colors.purple,
-      Colors.teal[700] ?? Colors.teal,
-      Colors.orange[700] ?? Colors.orange,
-      Colors.indigo[700] ?? Colors.indigo,
+      Colors.blue[300]!,
+      Colors.green[300]!,
+      Colors.amber[300]!,
+      Colors.red[300]!,
+      Colors.purple[300]!,
+      Colors.teal[300]!,
+      Colors.orange[300]!,
+      Colors.indigo[300]!,
     ];
-
     final Color coverColor = coverColors[titleHash % coverColors.length];
     final Color textColor = Colors.white;
 
@@ -359,23 +377,6 @@ class BookCard extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: textColor.withOpacity(0.7),
                     borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-
-                SizedBox(height: constraints.maxHeight * 0.05),
-
-                // Rating stars as a decorative element
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: List.generate(
-                    5,
-                    (index) => Icon(
-                      index < book.rating.floor()
-                          ? Icons.star
-                          : Icons.star_border,
-                      color: textColor.withOpacity(0.7),
-                      size: constraints.maxWidth * 0.08,
-                    ),
                   ),
                 ),
               ],
