@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'dart:html' as html;
+import 'package:url_launcher/url_launcher.dart';
 import '../models/user_profile.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -33,14 +33,12 @@ class SocialButton extends StatelessWidget {
         return const FaIcon(FontAwesomeIcons.medium);
       case 'dribbble':
         return const FaIcon(FontAwesomeIcons.dribbble);
-      case 'behance':
-        return const FaIcon(FontAwesomeIcons.behance);
       default:
         return const FaIcon(FontAwesomeIcons.link);
     }
   }
 
   void _launchURL(String url) {
-    html.window.open(url, '_blank');
+    launchUrl(Uri.parse(url));
   }
 }
