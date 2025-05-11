@@ -265,10 +265,10 @@ class ProjectCard extends StatelessWidget {
           color: Colors.white,
         );
       case "FlutterStack":
-        return FaIcon(
-          FontAwesomeIcons.flutter,
-          size: iconSize,
-          color: Colors.white,
+        return Image.asset(
+          "assets/images/icons/flutterstack.png",
+          width: iconSize,
+          height: iconSize,
         );
       case "Artwork Images":
         return FaIcon(
@@ -338,7 +338,7 @@ class ProjectCard extends StatelessWidget {
     switch (title) {
       case "Spendify":
         return const Color(0xFF8BC34A); // Green
-      case "Flutter Stack":
+      case "FlutterStack":
         return const Color(0xFF4169E1); // Royal blue
       case "Artwork Images":
         return const Color(0xFFFF4081); // Pink

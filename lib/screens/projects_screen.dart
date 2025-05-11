@@ -46,6 +46,9 @@ class ProjectsScreen extends StatelessWidget {
                         // Header
                         _buildHeader(themeController),
                         const SizedBox(height: 60),
+                        // Header
+                        _buildFilterChips(controller, themeController),
+                        const SizedBox(height: 60),
 
                         // Projects grid or list
                         _buildProjects(context, controller),
@@ -94,7 +97,7 @@ class ProjectsScreen extends StatelessWidget {
                 fontFamily: AppTheme.fontFamily,
                 fontSize: 48,
                 fontWeight: AppTheme.bold,
-                color: themeController.textPrimaryColor.withOpacity(0.8),
+                color: themeController.textPrimaryColor,
               ),
             ),
             const SizedBox(width: 8),
@@ -127,6 +130,68 @@ class ProjectsScreen extends StatelessWidget {
     );
   }
 
+  Widget _buildFilterChips(
+    ProjectsController controller,
+    ThemeController themeController,
+  ) {
+    return Obx(() {
+      return Container(
+        alignment: Alignment.center,
+        child: Wrap(
+          spacing: 12,
+          runSpacing: 12,
+          alignment: WrapAlignment.center,
+          children:
+              controller.filters.map((filter) {
+                final isSelected = controller.activeFilter.value == filter;
+
+                return InkWell(
+                  onTap: () => controller.setFilter(filter),
+                  borderRadius: BorderRadius.circular(24),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 8,
+                    ),
+                    decoration: BoxDecoration(
+                      color:
+                          isSelected
+                              ? themeController.textMutedColor
+                              : Colors.transparent,
+                      borderRadius: BorderRadius.circular(24),
+                      border: Border.all(
+                        color:
+                            isSelected
+                                ? Colors.transparent
+                                : themeController.textMutedColor.withOpacity(
+                                  0.3,
+                                ),
+                        width: 1,
+                      ),
+                    ),
+                    child: Text(
+                      filter,
+                      style: TextStyle(
+                        fontFamily: AppTheme.fontFamily,
+                        fontSize: 14,
+                        fontWeight:
+                            isSelected ? AppTheme.semiBold : AppTheme.medium,
+                        color:
+                            isSelected
+                                ? Colors.white
+                                : themeController.textPrimaryColor.withOpacity(
+                                  0.8,
+                                ),
+                      ),
+                    ),
+                  ),
+                );
+              }).toList(),
+        ),
+      );
+    });
+  }
+
   Widget _buildProjects(BuildContext context, ProjectsController controller) {
     final width = MediaQuery.of(context).size.width;
     final isMobile = width < AppBreakpoints.md;
@@ -141,7 +206,7 @@ class ProjectsScreen extends StatelessWidget {
 
   Widget _buildProjectsList(ProjectsController controller) {
     return Obx(() {
-      final projects = controller.projects;
+      final projects = controller.filteredProjects;
 
       return ListView.separated(
         shrinkWrap: true,
@@ -160,7 +225,7 @@ class ProjectsScreen extends StatelessWidget {
     ProjectsController controller,
   ) {
     return Obx(() {
-      final projects = controller.projects;
+      final projects = controller.filteredProjects;
 
       // Always use exactly 3 columns for consistency with navbar width
       const int columns = 3;

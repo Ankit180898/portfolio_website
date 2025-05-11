@@ -18,7 +18,7 @@ class ProjectsController extends GetxController {
   final RxString activeFilter = 'All'.obs;
 
   // Available filters
-  List<String> get filters => ['All', 'Web', 'App', 'Design'];
+  List<String> get filters => ['All', 'Web', 'App'];
 
   // Get filtered projects based on active filter
   List<Project> get filteredProjects {
@@ -27,7 +27,7 @@ class ProjectsController extends GetxController {
     }
 
     final ProjectType filterType = ProjectType.values.firstWhere(
-      (type) => type.toString().split('.').last == activeFilter.value,
+      (type) => type.toString().split('.').last == activeFilter.value.toLowerCase(),
       orElse: () => ProjectType.web,
     );
 
