@@ -1,6 +1,7 @@
 # Portfolio Website
 
-This is my portfolio website built with Flutter.
+This repository contains the source code for my personal portfolio website built using Flutter for web. 
+The website showcases my projects, skills, and experience.
 
 ## Features
 
