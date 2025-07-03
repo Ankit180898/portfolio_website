@@ -353,6 +353,17 @@ class AboutScreen extends StatelessWidget {
 
   Widget _buildTimeline(BuildContext context, bool isDark) {
     final jobs = [
+       {
+        "company": "Vajihi LLC",
+        "link": "https://www.linkedin.com/company/vajihi/people/",
+        "position": "Flutter Developer",
+        "type": "Remote",
+        "startDate": "JUN 11",
+        "endDate": "PRESENT",
+        "icon": FontAwesomeIcons.flutter,
+        "color": const Color(0xFF5B9FFF),
+        "isFirst": true,
+      },
       {
         "company": "Mobile Application Developer",
         "link": "",
@@ -362,7 +373,7 @@ class AboutScreen extends StatelessWidget {
         "endDate": "PRESENT",
         "icon": FontAwesomeIcons.mobileScreen,
         "color": const Color(0xFF5B9FFF),
-        "isFirst": true,
+        "isFirst": false,
       },
       {
         "company": "Flutter Developer",

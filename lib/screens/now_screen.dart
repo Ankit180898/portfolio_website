@@ -109,9 +109,9 @@ class NowScreen extends StatelessWidget {
 
                       _buildStatusItemWithIcon(
                         context,
-                        icon: FontAwesomeIcons.briefcase,
-                        text: 'Mobile Application Developer @ ',
-                        link: 'Freelance',
+                        icon: FontAwesomeIcons.flutter,
+                        text: 'Flutter Developer @ ',
+                        link: 'Vajihi LLC',
                         isDarkMode: isDarkMode,
                         textSecondaryColor: textSecondaryColor,
                       ),
