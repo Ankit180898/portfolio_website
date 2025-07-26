@@ -63,6 +63,15 @@ class Project {
 // Sample projects data
 final List<Project> allProjects = [
   Project(
+    title: "Bohri Cupid",
+    description:
+        "A dating app for Bohri Community. Live on Play Store.",
+    imageUrl: "assets/images/icons/bohra.png",
+    liveLink: "https://play.google.com/store/apps/details?id=com.mycompany.bohradatingapp&hl=en_IN",
+    technologies: ["Flutter", "Firebase", "Playstore"],
+    type: ProjectType.app,
+  ),
+  Project(
     title: "Sheqonomi",
     description:
         "Empowering women's voices with a podcasting platform. Live on Play Store.",

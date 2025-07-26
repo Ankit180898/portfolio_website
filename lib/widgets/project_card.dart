@@ -240,6 +240,12 @@ class ProjectCard extends StatelessWidget {
     final double iconSize = size ?? 64.0;
 
     switch (title) {
+      case "Bohri Cupid":
+        return Image.asset(
+          "assets/images/icons/bohra.png",
+          width: iconSize,
+          height: iconSize,
+        );
       case "Sheqonomi":
         return FaIcon(
           FontAwesomeIcons.podcast,
@@ -336,6 +342,8 @@ class ProjectCard extends StatelessWidget {
   Color _getColorForProject(String title) {
     // Return specific colors for featured projects
     switch (title) {
+      case "Bohri Cupid":
+        return const Color(0xFFFFD700); // dark gold
       case "Spendify":
         return const Color(0xFF8BC34A); // Green
       case "FlutterStack":
