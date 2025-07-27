@@ -353,7 +353,7 @@ class AboutScreen extends StatelessWidget {
 
   Widget _buildTimeline(BuildContext context, bool isDark) {
     final jobs = [
-       {
+      {
         "company": "Vajihi LLC",
         "link": "https://www.linkedin.com/company/vajihi/people/",
         "position": "Flutter Developer",
@@ -365,9 +365,9 @@ class AboutScreen extends StatelessWidget {
         "isFirst": true,
       },
       {
-        "company": "Mobile Application Developer",
+        "company": "Freelance",
         "link": "",
-        "position": "Freelance",
+        "position": "Mobile Application Developer",
         "type": "Remote",
         "startDate": "MAY 23",
         "endDate": "PRESENT",
@@ -376,9 +376,9 @@ class AboutScreen extends StatelessWidget {
         "isFirst": false,
       },
       {
-        "company": "Flutter Developer",
+        "company": "ControlShift",
         "link": "https://controlshift.in",
-        "position": "ControlShift",
+        "position": "Flutter Developer",
         "type": "Hybrid",
         "startDate": "FEB 23",
         "endDate": "APR 23",
@@ -387,9 +387,9 @@ class AboutScreen extends StatelessWidget {
         "isFirst": false,
       },
       {
-        "company": "Mobile Application Developer",
+        "company": "Unified Infotech",
         "link": "https://unifiedinfotech.com",
-        "position": "Unified Infotech",
+        "position": "Mobile Application Developer",
         "type": "Remote",
         "startDate": "APR 21",
         "endDate": "NOV 22",
