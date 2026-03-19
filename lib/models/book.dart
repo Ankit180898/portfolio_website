@@ -29,16 +29,16 @@ class Book {
       return imageUrl!;
     }
 
-    // Use OpenLibrary only for valid ISBN-10 or ISBN-13
+    // Use OpenLibrary for valid ISBN-10 or ISBN-13 (high quality)
     final isbnPattern = RegExp(r'^\d{9}[\dXx]$|^\d{13}$');
     if (isbn != null && isbnPattern.hasMatch(isbn!)) {
       return 'https://covers.openlibrary.org/b/isbn/$isbn-L.jpg?default=false';
     }
 
-    // Fallback to a generic cover image using author and title
+    // Fallback to a high-quality placeholder with book title and author
     String formattedTitle = title.toLowerCase().replaceAll(' ', '+');
     String formattedAuthor = author.toLowerCase().replaceAll(' ', '+');
-    return 'https://via.placeholder.com/400x600.png?text=$formattedAuthor+-+$formattedTitle';
+    return 'https://via.placeholder.com/400x600/4A90E2/FFFFFF?text=$formattedTitle+by+$formattedAuthor';
   }
 }
 
@@ -58,6 +58,8 @@ final List<Book> books = [
     rating: 5.0,
     readTimeMinutes: 35,
     isbn: "9781847943736", // Corrected ISBN
+    imageUrl:
+        "https://images-na.ssl-images-amazon.com/images/P/184794373X.01.L.jpg",
     tldrPoints: [
       TldrPoint(
         emoji: "🚀",
@@ -82,6 +84,8 @@ final List<Book> books = [
     rating: 5.0,
     readTimeMinutes: 40,
     isbn: "9781838858636", // Added full ISBN-13
+    imageUrl:
+        "https://images-na.ssl-images-amazon.com/images/P/1838858636.01.L.jpg",
     tldrPoints: [
       TldrPoint(
         emoji: "🎨",
@@ -109,6 +113,8 @@ final List<Book> books = [
     rating: 5.0,
     readTimeMinutes: 60,
     isbn: "9781451648539", // Corrected to full ISBN-13
+    imageUrl:
+        "https://images-na.ssl-images-amazon.com/images/P/1451648537.01.L.jpg",
     tldrPoints: [
       TldrPoint(
         emoji: "💡",
@@ -137,6 +143,8 @@ final List<Book> books = [
     rating: 4.5,
     readTimeMinutes: 45,
     isbn: "9781847941831", // Corrected to full ISBN-13
+    imageUrl:
+        "https://images-na.ssl-images-amazon.com/images/P/1847941834.01.L.jpg",
     tldrPoints: [
       TldrPoint(
         emoji: "🧠",
@@ -205,6 +213,8 @@ final List<Book> books = [
     rating: 4.5,
     readTimeMinutes: 40,
     isbn: "9780753553886", // Corrected to full ISBN-13
+    imageUrl:
+        "https://images-na.ssl-images-amazon.com/images/P/0753553880.01.L.jpg",
     tldrPoints: [
       TldrPoint(
         emoji: "🤔",
@@ -239,6 +249,8 @@ final List<Book> books = [
     rating: 4.5,
     readTimeMinutes: 38,
     isbn: "9780857197689", // Corrected to full ISBN-13
+    imageUrl:
+        "https://images-na.ssl-images-amazon.com/images/P/0857197681.01.L.jpg",
     tldrPoints: [
       TldrPoint(
         emoji: "💰",

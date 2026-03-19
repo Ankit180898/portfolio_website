@@ -229,25 +229,10 @@ class HomeScreen extends StatelessWidget {
             size: const Size(double.infinity, 1),
           ).paddingSymmetric(horizontal: 16),
         ),
-        TextButton(
-          onPressed: () => Get.toNamed(route),
-          style: TextButton.styleFrom(
-            splashFactory: NoSplash.splashFactory,
-            foregroundColor: themeController.textMutedColor,
-            backgroundColor: Colors.transparent,
-            padding: EdgeInsets.zero,
-            minimumSize: Size.zero,
-            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-          ),
-          child: Text(
-            "View all",
-            style: TextStyle(
-              fontFamily: AppTheme.fontFamily,
-              fontSize: 14,
-              fontWeight: AppTheme.regular,
-              color: themeController.textPrimaryColor.withOpacity(0.8),
-            ),
-          ),
+        _HoverableTextLink(
+          text: "View all",
+          onTap: () => Get.toNamed(route),
+          themeController: themeController,
         ),
       ],
     );
@@ -295,8 +280,8 @@ class HomeScreen extends StatelessWidget {
 
       return LayoutBuilder(
         builder: (context, constraints) {
-          final columnCount = isTablet ? 3 : 3;
-          final spacing = isTablet ? 24.0 : 48.0;
+          final columnCount = isTablet ? 2 : 3;
+          final spacing = 24.0;
           final itemWidth =
               (constraints.maxWidth - (spacing * (columnCount - 1))) /
               columnCount;
@@ -382,4 +367,46 @@ class HomeScreen extends StatelessWidget {
   //     await launchUrl(uri);
   //   }
   // }
+}
+
+class _HoverableTextLink extends StatefulWidget {
+  final String text;
+  final VoidCallback onTap;
+  final ThemeController themeController;
+
+  const _HoverableTextLink({
+    required this.text,
+    required this.onTap,
+    required this.themeController,
+  });
+
+  @override
+  State<_HoverableTextLink> createState() => _HoverableTextLinkState();
+}
+
+class _HoverableTextLinkState extends State<_HoverableTextLink> {
+  bool _isHovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      child: GestureDetector(
+        onTap: widget.onTap,
+        child: Text(
+          widget.text,
+          style: TextStyle(
+            fontFamily: AppTheme.fontFamily,
+            fontSize: 14,
+            fontWeight: AppTheme.regular,
+            color: widget.themeController.textPrimaryColor.withValues(alpha: 0.8),
+            decoration: _isHovered ? TextDecoration.underline : TextDecoration.none,
+            decorationColor: widget.themeController.textPrimaryColor.withValues(alpha: 0.8),
+          ),
+        ),
+      ),
+    );
+  }
 }

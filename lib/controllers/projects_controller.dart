@@ -5,72 +5,64 @@ import '../models/project.dart';
 import '../config/routes.dart';
 
 class ProjectsController extends GetxController {
-  // Observable list of all projects
   final RxList<Project> projects = allProjects.obs;
-
-  // Observable for selected project (if needed)
   final Rx<Project?> selectedProject = Rx<Project?>(null);
-
-  // Observable for loading state
   final RxBool isLoading = false.obs;
-
-  // Observable for active filter
   final RxString activeFilter = 'All'.obs;
+  final RxString searchQuery = ''.obs;
 
-  // Available filters
   List<String> get filters => ['All', 'Web', 'App'];
 
-  // Get filtered projects based on active filter
   List<Project> get filteredProjects {
-    if (activeFilter.value == 'All') {
-      return projects;
+    var list = projects.toList();
+
+    // Filter by type
+    if (activeFilter.value != 'All') {
+      final ProjectType filterType = ProjectType.values.firstWhere(
+        (type) =>
+            type.toString().split('.').last ==
+            activeFilter.value.toLowerCase(),
+        orElse: () => ProjectType.web,
+      );
+      list = list.where((project) => project.type == filterType).toList();
     }
 
-    final ProjectType filterType = ProjectType.values.firstWhere(
-      (type) => type.toString().split('.').last == activeFilter.value.toLowerCase(),
-      orElse: () => ProjectType.web,
-    );
+    // Filter by search query
+    final q = searchQuery.value.trim().toLowerCase();
+    if (q.isNotEmpty) {
+      list = list.where((project) {
+        final title = project.title.toLowerCase();
+        final description = project.description.toLowerCase();
+        final tech = project.technologies.join(' ').toLowerCase();
+        return title.contains(q) ||
+            description.contains(q) ||
+            tech.contains(q);
+      }).toList();
+    }
 
-    return projects.where((project) => project.type == filterType).toList();
+    return list;
   }
 
-  // Get featured projects (first 3 projects)
   List<Project> get featuredProjects => projects.take(3).toList();
 
-  // Method to select a project
   void selectProject(Project project) {
     selectedProject.value = project;
   }
 
-  // Method to clear selected project
   void clearSelectedProject() {
     selectedProject.value = null;
   }
 
-  // Method to filter projects by search query
-  List<Project> filterProjects(String query) {
-    if (query.isEmpty) return projects;
-
-    return projects.where((project) {
-      final title = project.title.toLowerCase();
-      final description = project.description.toLowerCase();
-      final searchQuery = query.toLowerCase();
-
-      return title.contains(searchQuery) || description.contains(searchQuery);
-    }).toList();
-  }
-
-  // Method to set active filter
   void setFilter(String filter) {
     activeFilter.value = filter;
   }
 
-  // Method to navigate to project detail
+  void setSearchQuery(String q) => searchQuery.value = q;
+
   void navigateToProjectDetail(String projectTitle) {
     Get.toNamed('${AppRoutes.works}?project=$projectTitle');
   }
 
-  // Method to get project by title
   Project getProjectById(String title) {
     return projects.firstWhere(
       (project) => project.title == title,
@@ -78,24 +70,10 @@ class ProjectsController extends GetxController {
     );
   }
 
-  // Method to open project (either live link or github link)
   void openProject(Project project) {
-    if (project.liveLink != null) {
-      launchProjectLink(project.liveLink!);
-    } else if (project.githubLink != null) {
-      launchProjectLink(project.githubLink!);
-    } else {
-      Get.snackbar(
-        'Info',
-        'No external links available for this project',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.grey[900],
-        colorText: Colors.white,
-      );
-    }
+    Get.toNamed(AppRoutes.worksDetail, arguments: project);
   }
 
-  // Method to launch external URLs
   Future<void> launchProjectLink(String url) async {
     final Uri uri = Uri.parse(url);
     try {

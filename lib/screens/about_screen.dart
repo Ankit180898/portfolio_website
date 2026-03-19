@@ -28,7 +28,7 @@ class AboutScreen extends StatelessWidget {
       final isMobile = width < AppBreakpoints.md;
 
       return Scaffold(
-        backgroundColor: isDark ? const Color(0xFF18181B) : Colors.white,
+        backgroundColor: themeController.backgroundColor,
         body: Column(
           children: [
             // Navigation bar - use standard navbar for both mobile and desktop
@@ -52,7 +52,7 @@ class AboutScreen extends StatelessWidget {
                           'About Me',
                           style: TextStyle(
                             fontFamily: AppTheme.fontFamily,
-                            fontSize: isDesktop ? 48 : 40,
+                            fontSize: isDesktop ? 48 : 32,
                             fontWeight: AppTheme.bold,
                             color: isDark ? Colors.white : Colors.black,
                           ),
@@ -264,7 +264,12 @@ class AboutScreen extends StatelessWidget {
                         fit: BoxFit.cover,
                       ),
                     ),
-                    Image.asset("assets/images/desk1.jpg"),
+                    Expanded(
+                      child: Image.asset(
+                        "assets/images/desk1.jpg",
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                     Expanded(
                       child: Image.asset(
                         "assets/images/desk2.jpg",

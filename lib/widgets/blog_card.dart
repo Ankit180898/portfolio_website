@@ -6,116 +6,176 @@ import '../models/blog_post.dart';
 import '../controllers/theme_controller.dart';
 import '../config/theme.dart';
 import '../config/constants.dart';
+import '../config/routes.dart';
 import 'dart:math' as math;
 
-class BlogCard extends StatelessWidget {
+// Badge accent color for personal posts
+const Color _personalBadgeColor = Color(0xFF6366F1);
+
+class BlogCard extends StatefulWidget {
   final BlogPost blogPost;
 
   const BlogCard({super.key, required this.blogPost});
 
   @override
+  State<BlogCard> createState() => _BlogCardState();
+}
+
+class _BlogCardState extends State<BlogCard>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  late Animation<double> _scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 200),
+      vsync: this,
+    );
+    _scaleAnimation = Tween<double>(begin: 1.0, end: 1.03).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final themeController = Get.find<ThemeController>();
 
-    // Card with reduced height and no splash effect
     return MouseRegion(
       cursor: SystemMouseCursors.click,
+      onEnter: (_) => _animationController.forward(),
+      onExit: (_) => _animationController.reverse(),
       child: GestureDetector(
-        onTap: blogPost.link != null ? () => _launchURL(blogPost.link!) : null,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Blog Image with proper error handling and placeholder
-            ClipRRect(
-              borderRadius: BorderRadius.circular(AppLayout.borderRadiusMD),
-              child: AspectRatio(
-                aspectRatio: 16 / 9,
-                child: Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    // Decorative background based on blog title
-                    Container(
-                      decoration: BoxDecoration(
-                        color: _getColorForPost(blogPost.title),
-                        borderRadius: BorderRadius.circular(
-                          AppLayout.borderRadiusMD,
+        onTap: () {
+          if (widget.blogPost.type == BlogPostType.personal) {
+            Get.toNamed(AppRoutes.blogDetail, arguments: widget.blogPost);
+          } else if (widget.blogPost.link != null) {
+            _launchURL(widget.blogPost.link!);
+          }
+        },
+        child: AnimatedBuilder(
+          animation: _animationController,
+          builder: (context, child) => Transform.scale(
+            scale: _scaleAnimation.value,
+            child: child,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Blog image with placeholder
+              ClipRRect(
+                borderRadius: BorderRadius.circular(AppLayout.borderRadiusMD),
+                child: AspectRatio(
+                  aspectRatio: 16 / 9,
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          color: _getColorForPost(widget.blogPost.title),
+                          borderRadius: BorderRadius.circular(
+                            AppLayout.borderRadiusMD,
+                          ),
                         ),
                       ),
-                    ),
-
-                    // Diagonal pattern for visual interest
-                    CustomPaint(
-                      painter: DiagonalPatternPainter(
-                        color: Colors.white.withOpacity(0.1),
-                        lineWidth: 2,
-                        spacing: 15,
+                      CustomPaint(
+                        painter: DiagonalPatternPainter(
+                          color: Colors.white.withValues(alpha: 0.1),
+                          lineWidth: 2,
+                          spacing: 15,
+                        ),
                       ),
-                    ),
-
-                    // Center icon or logo
-                    Center(
-                      child: FaIcon(
-                        _getIconForPost(blogPost.title),
-                        size: 48,
-                        color: Colors.white,
+                      Center(
+                        child: FaIcon(
+                          _getIconForPost(widget.blogPost.title),
+                          size: 48,
+                          color: Colors.white,
+                        ),
                       ),
-                    ),
-
-                    if (blogPost.imageUrl.isNotEmpty)
-                      Image.asset(
-                        blogPost.imageUrl,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) {
-                          // Don't show anything on error, we already have our placeholder
-                          return const SizedBox.shrink();
-                        },
-                      ),
-                  ],
+                      if (widget.blogPost.imageUrl.isNotEmpty)
+                        Image.asset(
+                          widget.blogPost.imageUrl,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) =>
+                              const SizedBox.shrink(),
+                        ),
+                      // "My Writing" badge for personal posts
+                      if (widget.blogPost.type == BlogPostType.personal)
+                        Positioned(
+                          top: 10,
+                          left: 10,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 4,
+                            ),
+                            decoration: BoxDecoration(
+                              color: _personalBadgeColor,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: const Text(
+                              'My Writing',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 11,
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: 0.3,
+                              ),
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(height: 12),
+              const SizedBox(height: 12),
 
-            Text(
-              blogPost.title,
-              style: TextStyle(
-                fontFamily: AppTheme.fontFamily,
-                fontSize: AppTypography.font16,
-                fontWeight: AppTheme.semiBold,
-                color: themeController.textPrimaryColor.withOpacity(0.8),
-                height: 1.2,
+              Text(
+                widget.blogPost.title,
+                style: TextStyle(
+                  fontFamily: AppTheme.fontFamily,
+                  fontSize: AppTypography.font16,
+                  fontWeight: AppTheme.semiBold,
+                  color: themeController.textPrimaryColor.withValues(alpha: 0.8),
+                  height: 1.2,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-            const SizedBox(height: 4),
+              const SizedBox(height: 4),
 
-            // Date
-            Text(
-              blogPost.date,
-              style: TextStyle(
-                fontFamily: AppTheme.fontFamily,
-                color: themeController.textMutedColor,
-                fontSize: AppTypography.font12,
-                fontWeight: AppTheme.regular,
-                height: 1.2,
+              Text(
+                widget.blogPost.date,
+                style: TextStyle(
+                  fontFamily: AppTheme.fontFamily,
+                  color: themeController.textMutedColor,
+                  fontSize: AppTypography.font12,
+                  fontWeight: AppTheme.regular,
+                  height: 1.2,
+                ),
               ),
-            ),
-            const SizedBox(height: 6),
+              const SizedBox(height: 8),
 
-            // Blog Description
-            Text(
-              blogPost.description,
-              style: TextStyle(
-                fontFamily: AppTheme.fontFamily,
-                color: themeController.textSecondaryColor,
-                fontSize: AppTypography.font14,
-                height: 1.4,
+              Text(
+                widget.blogPost.description,
+                style: TextStyle(
+                  fontFamily: AppTheme.fontFamily,
+                  color: themeController.textSecondaryColor,
+                  fontSize: AppTypography.font14,
+                  height: 1.5,
+                ),
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
               ),
-              maxLines: 3,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

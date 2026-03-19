@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:portfolio_website/widgets/footer.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../config/constants.dart';
 import '../controllers/theme_controller.dart';
 import '../controllers/now_controller.dart';
 import '../utils/responsive_helper.dart';
@@ -27,7 +28,7 @@ class NowScreen extends StatelessWidget {
       final NowController nowController = Get.find<NowController>();
 
       return Scaffold(
-        backgroundColor: isDarkMode ? const Color(0xFF18181B) : Colors.white,
+        backgroundColor: themeController.backgroundColor,
         body: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -36,16 +37,15 @@ class NowScreen extends StatelessWidget {
               const NavBar(currentIndex: 5),
 
               // Now content
-              Responsive.responsiveContainer(
-                context: context,
-                child: Padding(
-                  padding:
-                      isMobile
-                          ? const EdgeInsets.symmetric(
-                            horizontal: 20,
-                            vertical: 40,
-                          )
-                          : Responsive.responsivePadding(context),
+              Center(
+                child: Container(
+                  width: isMobile
+                      ? MediaQuery.of(context).size.width
+                      : AppLayout.maxContentWidth,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: isMobile ? AppLayout.paddingMD : 0,
+                    vertical: AppLayout.paddingXL,
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -150,13 +150,7 @@ class NowScreen extends StatelessWidget {
                       ),
 
                       const SizedBox(height: 80),
-                      Responsive.responsiveContainer(
-                        context: context,
-                        child: Padding(
-                          padding: Responsive.responsivePadding(context),
-                          child: const Footer(),
-                        ),
-                      ),
+                      const Footer(),
                     ],
                   ),
                 ),
@@ -183,7 +177,7 @@ class NowScreen extends StatelessWidget {
             Text(
               'Now',
               style: TextStyle(
-                fontSize: 40,
+                fontSize: 32,
                 fontWeight: FontWeight.bold,
                 color: isDarkMode ? Colors.white : Colors.black,
               ),
@@ -227,7 +221,7 @@ class NowScreen extends StatelessWidget {
             Text(
               'Now',
               style: TextStyle(
-                fontSize: 36,
+                fontSize: 32,
                 fontWeight: FontWeight.bold,
                 color: isDarkMode ? Colors.white : Colors.black,
               ),

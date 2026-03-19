@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../models/book.dart';
 import '../config/theme.dart';
+import '../config/constants.dart';
 import 'package:get/get.dart';
 import '../controllers/theme_controller.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
-class BookCard extends StatelessWidget {
+class BookCard extends StatefulWidget {
   final Book book;
   final Function()? onTap;
   final bool isDesktop;
@@ -19,16 +20,24 @@ class BookCard extends StatelessWidget {
   });
 
   @override
+  State<BookCard> createState() => _BookCardState();
+}
+
+class _BookCardState extends State<BookCard> {
+  bool _isHovered = false;
+
+  @override
   Widget build(BuildContext context) {
     final themeController = Get.find<ThemeController>();
     final screenWidth = MediaQuery.of(context).size.width;
 
     // Responsive design - determine if we're in mobile/tablet layout
-    final bool isMobile = screenWidth < 600;
-    final bool isTablet = screenWidth >= 600 && screenWidth < 1200;
+    final bool isMobile = screenWidth < AppBreakpoints.md;
+    final bool isTablet =
+        screenWidth >= AppBreakpoints.md && screenWidth < AppBreakpoints.lg;
 
     // Use mobile layout if explicitly not desktop or screen is narrow
-    final useHorizontalLayout = !isDesktop || isMobile || isTablet;
+    final useHorizontalLayout = !widget.isDesktop || isMobile || isTablet;
 
     if (useHorizontalLayout) {
       return _buildMobileCard(themeController);
@@ -40,91 +49,127 @@ class BookCard extends StatelessWidget {
   Widget _buildDesktopCard(ThemeController themeController) {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
       child: GestureDetector(
-        onTap: onTap,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Book Cover
-            AspectRatio(
-              aspectRatio: 2 / 3, // Standard book cover ratio
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: _buildBookCover(),
-              ),
-            ),
-            const SizedBox(height: 12),
-
-            // Book Title
-            Text(
-              book.title,
-              style: TextStyle(
-                fontFamily: AppTheme.fontFamily,
-                fontWeight: AppTheme.semiBold,
-                fontSize: 18,
-                color: themeController.textPrimaryColor
-                    .withOpacity(0.8)
-                    .withOpacity(0.8),
-              ),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),
-            const SizedBox(height: 4),
-
-            // Author
-            Text(
-              'by ${book.author}',
-              style: TextStyle(
-                fontFamily: AppTheme.fontFamily,
-                fontWeight: AppTheme.regular,
-                fontSize: 14,
-                color: themeController.textSecondaryColor,
-              ),
-            ),
-            const SizedBox(height: 6),
-
-            // Rating
-            Row(
-              children: [
-                FaIcon(
-                  FontAwesomeIcons.star,
-                  size: 16,
-                  color: themeController.textPrimaryColor
-                      .withOpacity(0.8)
-                      .withOpacity(0.8),
+        onTap: widget.onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeInOut,
+          transform: Matrix4.identity()..scale(_isHovered ? 1.02 : 1.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Book Cover
+              AspectRatio(
+                aspectRatio: 2 / 3, // Standard book cover ratio
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: _buildBookCover(),
                 ),
-                const SizedBox(width: 4),
-                Text(
-                  book.rating.toString(),
-                  style: TextStyle(
-                    fontFamily: AppTheme.fontFamily,
-                    fontWeight: AppTheme.medium,
-                    fontSize: 16,
-                    color: themeController.textSecondaryColor,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 4),
-
-            // Date
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-              decoration: BoxDecoration(
-                color: themeController.surfaceColor,
-                borderRadius: BorderRadius.circular(4),
               ),
-              child: Text(
-                book.date,
+              const SizedBox(height: 12),
+
+              // Book Title
+              AnimatedDefaultTextStyle(
+                duration: const Duration(milliseconds: 200),
+                style: TextStyle(
+                  fontFamily: AppTheme.fontFamily,
+                  fontWeight: AppTheme.semiBold,
+                  fontSize: 18,
+                  color:
+                      _isHovered
+                          ? themeController.textPrimaryColor
+                          : themeController.textPrimaryColor.withOpacity(0.8),
+                ),
+                child: Text(
+                  widget.book.title,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              const SizedBox(height: 4),
+
+              // Author
+              AnimatedDefaultTextStyle(
+                duration: const Duration(milliseconds: 200),
                 style: TextStyle(
                   fontFamily: AppTheme.fontFamily,
                   fontWeight: AppTheme.regular,
                   fontSize: 14,
-                  color: themeController.textSecondaryColor,
+                  color:
+                      _isHovered
+                          ? themeController.textSecondaryColor.withOpacity(0.9)
+                          : themeController.textSecondaryColor,
+                ),
+                child: Text('by ${widget.book.author}'),
+              ),
+              const SizedBox(height: 6),
+
+              // Rating
+              Row(
+                children: [
+                  AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    child: FaIcon(
+                      FontAwesomeIcons.star,
+                      size: 16,
+                      color:
+                          _isHovered
+                              ? themeController.textPrimaryColor
+                              : themeController.textPrimaryColor.withOpacity(
+                                0.8,
+                              ),
+                    ),
+                  ),
+                  const SizedBox(width: 4),
+                  AnimatedDefaultTextStyle(
+                    duration: const Duration(milliseconds: 200),
+                    style: TextStyle(
+                      fontFamily: AppTheme.fontFamily,
+                      fontWeight: AppTheme.medium,
+                      fontSize: 16,
+                      color:
+                          _isHovered
+                              ? themeController.textSecondaryColor.withOpacity(
+                                0.9,
+                              )
+                              : themeController.textSecondaryColor,
+                    ),
+                    child: Text(widget.book.rating.toString()),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 4),
+
+              // Date
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                decoration: BoxDecoration(
+                  color:
+                      _isHovered
+                          ? themeController.surfaceColor.withOpacity(0.8)
+                          : themeController.surfaceColor,
+                  borderRadius: BorderRadius.circular(4),
+                ),
+                child: Text(
+                  widget.book.date,
+                  style: TextStyle(
+                    fontFamily: AppTheme.fontFamily,
+                    fontWeight: AppTheme.regular,
+                    fontSize: 14,
+                    color:
+                        _isHovered
+                            ? themeController.textSecondaryColor.withOpacity(
+                              0.9,
+                            )
+                            : themeController.textSecondaryColor,
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -134,7 +179,7 @@ class BookCard extends StatelessWidget {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
-        onTap: onTap,
+        onTap: widget.onTap,
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 12.0),
           child: Row(
@@ -144,8 +189,8 @@ class BookCard extends StatelessWidget {
               ClipRRect(
                 borderRadius: BorderRadius.circular(8),
                 child: SizedBox(
-                  width: 100,
-                  height: 150,
+                  width: 80,
+                  height: 120,
                   child: _buildBookCover(),
                 ),
               ),
@@ -158,14 +203,12 @@ class BookCard extends StatelessWidget {
                   children: [
                     // Book Title
                     Text(
-                      book.title,
+                      widget.book.title,
                       style: TextStyle(
                         fontFamily: AppTheme.fontFamily,
                         fontWeight: AppTheme.semiBold,
-                        fontSize: 20,
-                        color: themeController.textPrimaryColor
-                            .withOpacity(0.8)
-                            .withOpacity(0.8),
+                        fontSize: 18,
+                        color: themeController.textPrimaryColor,
                       ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
@@ -174,11 +217,11 @@ class BookCard extends StatelessWidget {
 
                     // Author
                     Text(
-                      'by ${book.author}',
+                      'by ${widget.book.author}',
                       style: TextStyle(
                         fontFamily: AppTheme.fontFamily,
                         fontWeight: AppTheme.regular,
-                        fontSize: 16,
+                        fontSize: 14,
                         color: themeController.textSecondaryColor,
                       ),
                     ),
@@ -189,18 +232,16 @@ class BookCard extends StatelessWidget {
                       children: [
                         FaIcon(
                           FontAwesomeIcons.star,
-                          size: 16,
-                          color: themeController.textPrimaryColor
-                              .withOpacity(0.8)
-                              .withOpacity(0.8),
+                          size: 14,
+                          color: themeController.textPrimaryColor,
                         ),
                         const SizedBox(width: 4),
                         Text(
-                          book.rating.toString(),
+                          widget.book.rating.toString(),
                           style: TextStyle(
                             fontFamily: AppTheme.fontFamily,
                             fontWeight: AppTheme.medium,
-                            fontSize: 16,
+                            fontSize: 14,
                             color: themeController.textSecondaryColor,
                           ),
                         ),
@@ -211,19 +252,19 @@ class BookCard extends StatelessWidget {
                     // Date
                     Container(
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 4,
-                        vertical: 2,
+                        horizontal: 6,
+                        vertical: 3,
                       ),
                       decoration: BoxDecoration(
                         color: themeController.surfaceColor,
-                        borderRadius: BorderRadius.circular(4),
+                        borderRadius: BorderRadius.circular(6),
                       ),
                       child: Text(
-                        book.date,
+                        widget.book.date,
                         style: TextStyle(
                           fontFamily: AppTheme.fontFamily,
                           fontWeight: AppTheme.regular,
-                          fontSize: 14,
+                          fontSize: 12,
                           color: themeController.textSecondaryColor,
                         ),
                       ),
@@ -240,7 +281,7 @@ class BookCard extends StatelessWidget {
 
   Widget _buildBookCover({double? height}) {
     // Ensure the image URL is set
-    final imageUrl = book.getImageUrl();
+    final imageUrl = widget.book.getImageUrl();
 
     // First check if URL is empty or invalid
     if (imageUrl.isEmpty || !Uri.parse(imageUrl).isAbsolute) {
@@ -249,7 +290,7 @@ class BookCard extends StatelessWidget {
 
     // Use CachedNetworkImage for better performance with network images
     return Hero(
-      tag: 'book_${book.title}',
+      tag: 'book_${widget.book.title}',
       child: CachedNetworkImage(
         imageUrl: imageUrl,
         fit: BoxFit.cover,
@@ -287,7 +328,7 @@ class BookCard extends StatelessWidget {
     // Use a simpler approach to ensure rendering
 
     // Generate a consistent color based on the book title
-    final int titleHash = book.title.hashCode.abs();
+    final int titleHash = widget.book.title.hashCode.abs();
     final List<Color> coverColors = [
       Colors.blue[300]!,
       Colors.green[300]!,
@@ -328,7 +369,7 @@ class BookCard extends StatelessWidget {
               children: [
                 // Add author at top
                 Text(
-                  book.author.toUpperCase(),
+                  widget.book.author.toUpperCase(),
                   style: TextStyle(
                     color: textColor.withOpacity(0.7),
                     fontWeight: FontWeight.w500,
@@ -356,7 +397,7 @@ class BookCard extends StatelessWidget {
                   flex: 6,
                   child: Center(
                     child: Text(
-                      book.title,
+                      widget.book.title,
                       style: TextStyle(
                         color: textColor,
                         fontWeight: FontWeight.bold,

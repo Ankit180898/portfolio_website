@@ -30,7 +30,7 @@ class NavBar extends StatelessWidget {
         padding: const EdgeInsets.only(top: 16.0),
         child: Center(
           child: Container(
-            width: 708,
+            width: AppLayout.maxContentWidth,
             height: 56,
             margin: const EdgeInsets.symmetric(horizontal: 20),
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 0),
@@ -112,7 +112,7 @@ class NavBar extends StatelessWidget {
       padding: const EdgeInsets.only(top: 16.0),
       child: Center(
         child: Container(
-          width: 320,
+          width: (MediaQuery.of(context).size.width - 40).clamp(280.0, 400.0),
           height: 56,
           margin: const EdgeInsets.symmetric(horizontal: 20),
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 0),

@@ -19,19 +19,30 @@ class BlogScreen extends StatefulWidget {
 
 class _BlogScreenState extends State<BlogScreen> {
   String _searchQuery = '';
+  BlogPostType? _selectedType; // null = All
+  late TextEditingController _searchController;
+
+  @override
+  void initState() {
+    super.initState();
+    _searchController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   List<BlogPost> get _filteredPosts {
-    if (_searchQuery.isEmpty) {
-      return blogPosts;
-    }
-
-    return blogPosts.where((post) {
-      final title = post.title.toLowerCase();
-      final description = post.description.toLowerCase();
+    var posts = blogPosts.where((post) {
+      if (_selectedType != null && post.type != _selectedType) return false;
+      if (_searchQuery.isEmpty) return true;
       final query = _searchQuery.toLowerCase();
-
-      return title.contains(query) || description.contains(query);
+      return post.title.toLowerCase().contains(query) ||
+          post.description.toLowerCase().contains(query);
     }).toList();
+    return posts;
   }
 
   @override
@@ -39,36 +50,31 @@ class _BlogScreenState extends State<BlogScreen> {
     final themeController = Get.find<ThemeController>();
 
     return Obx(() {
-      final isDarkMode = themeController.isDarkMode;
-
       return Scaffold(
-        backgroundColor: isDarkMode ? const Color(0xFF18181B) : Colors.white,
+        backgroundColor: themeController.backgroundColor,
         body: Column(
           children: [
-            // Navigation bar
             const NavBar(currentIndex: 1),
-
-            // Main content
             Expanded(
               child: SingleChildScrollView(
                 child: Center(
                   child: Container(
-                    width:
-                        Responsive.isMobile(context)
-                            ? MediaQuery.of(context).size.width
-                            : AppLayout.maxContentWidth,
+                    width: Responsive.isMobile(context)
+                        ? MediaQuery.of(context).size.width
+                        : AppLayout.maxContentWidth,
                     padding: EdgeInsets.symmetric(
-                      horizontal:
-                          Responsive.isMobile(context)
-                              ? AppLayout.paddingMD
-                              : 0,
+                      horizontal: Responsive.isMobile(context)
+                          ? AppLayout.paddingMD
+                          : 0,
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         const SizedBox(height: 40),
                         _buildHeader(context, themeController),
-                        const SizedBox(height: 40),
+                        const SizedBox(height: 32),
+                        _buildTabs(context, themeController),
+                        const SizedBox(height: 32),
                         _buildSearchBar(context, themeController),
                         const SizedBox(height: 40),
                         _buildBlogGrid(context, themeController),
@@ -89,34 +95,33 @@ class _BlogScreenState extends State<BlogScreen> {
   Widget _buildHeader(BuildContext context, ThemeController themeController) {
     return Column(
       children: [
-        // Title with emoji
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text("📝 ", style: TextStyle(fontSize: 32)),
+            Text("📝 ", style: TextStyle(fontSize: Responsive.isMobile(context) ? 24 : 32)),
             Text(
               "Blog",
               style: TextStyle(
                 fontFamily: AppTheme.fontFamily,
                 fontWeight: AppTheme.bold,
-                fontSize: 36,
-                color: themeController.textPrimaryColor.withOpacity(0.8),
+                fontSize: Responsive.isMobile(context) ? 28 : 36,
+                color: themeController.textPrimaryColor.withValues(alpha: 0.8),
               ),
             ),
           ],
         ),
         const SizedBox(height: 16),
-
-        // Description
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Text(
-            "A collection of articles on various topics of interest",
+            "My writing and curated reads on Flutter, design, and building products",
             textAlign: TextAlign.center,
             style: TextStyle(
               fontFamily: AppTheme.fontFamily,
               fontWeight: AppTheme.regular,
-              fontSize: 18,
+              fontSize: Responsive.isMobile(context) ? 15 : 18,
+              color: themeController.textSecondaryColor,
+              height: 1.5,
             ),
           ),
         ),
@@ -124,20 +129,61 @@ class _BlogScreenState extends State<BlogScreen> {
     );
   }
 
-  Widget _buildSearchBar(
-    BuildContext context,
-    ThemeController themeController,
-  ) {
+  Widget _buildTabs(BuildContext context, ThemeController themeController) {
+    final tabs = <String, BlogPostType?>{
+      'All': null,
+      'My Writing': BlogPostType.personal,
+      'Curated': BlogPostType.external,
+    };
+
+    return Wrap(
+      spacing: 10,
+      runSpacing: 10,
+      alignment: WrapAlignment.center,
+      children: tabs.entries.map((entry) {
+        final isSelected = _selectedType == entry.value;
+        return GestureDetector(
+          onTap: () => setState(() => _selectedType = entry.value),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 180),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+            decoration: BoxDecoration(
+              color: isSelected
+                  ? themeController.textPrimaryColor.withValues(alpha: 0.9)
+                  : Colors.transparent,
+              borderRadius: BorderRadius.circular(24),
+              border: Border.all(
+                color: isSelected
+                    ? Colors.transparent
+                    : themeController.textMutedColor.withValues(alpha: 0.35),
+                width: 1,
+              ),
+            ),
+            child: Text(
+              entry.key,
+              style: TextStyle(
+                fontFamily: AppTheme.fontFamily,
+                fontSize: 14,
+                fontWeight: isSelected ? AppTheme.semiBold : AppTheme.medium,
+                color: isSelected
+                    ? themeController.backgroundColor
+                    : themeController.textMutedColor,
+              ),
+            ),
+          ),
+        );
+      }).toList(),
+    );
+  }
+
+  Widget _buildSearchBar(BuildContext context, ThemeController themeController) {
     return Container(
       height: 48,
       width: double.infinity,
       decoration: BoxDecoration(
-        color:
-            themeController.isDarkMode
-                ? const Color(
-                  0xFF222222,
-                ) // Darker color for dark mode search field
-                : AppTheme.lightSurface,
+        color: themeController.isDarkMode
+            ? const Color(0xFF222222)
+            : AppTheme.lightSurface,
         borderRadius: BorderRadius.circular(8),
         border: Border.all(color: themeController.borderColor, width: 1),
       ),
@@ -148,23 +194,20 @@ class _BlogScreenState extends State<BlogScreen> {
           const SizedBox(width: 12),
           Expanded(
             child: TextField(
-              onChanged: (value) {
-                setState(() {
-                  _searchQuery = value;
-                });
-              },
-              cursorColor: themeController.textPrimaryColor.withOpacity(0.8),
+              controller: _searchController,
+              onChanged: (value) => setState(() => _searchQuery = value),
+              cursorColor: themeController.textPrimaryColor.withValues(alpha: 0.8),
               cursorWidth: 1,
               cursorRadius: const Radius.circular(1),
               style: TextStyle(
                 fontFamily: AppTheme.fontFamily,
-                color: themeController.textPrimaryColor.withOpacity(0.8),
+                color: themeController.textPrimaryColor.withValues(alpha: 0.8),
                 fontSize: 15,
                 fontWeight: AppTheme.regular,
                 height: 1.5,
               ),
               decoration: InputDecoration(
-                hintText: 'Search posts, tags...',
+                hintText: 'Search posts...',
                 hintStyle: TextStyle(
                   fontFamily: AppTheme.fontFamily,
                   color: themeController.textMutedColor,
@@ -177,6 +220,25 @@ class _BlogScreenState extends State<BlogScreen> {
               ),
             ),
           ),
+          if (_searchQuery.isNotEmpty) ...[
+            const SizedBox(width: 8),
+            Material(
+              color: Colors.transparent,
+              child: InkWell(
+                onTap: () {
+                  setState(() => _searchQuery = '');
+                  _searchController.clear();
+                },
+                borderRadius: BorderRadius.circular(4),
+                splashColor: themeController.textPrimaryColor.withValues(alpha: 0.1),
+                highlightColor: themeController.textPrimaryColor.withValues(alpha: 0.05),
+                child: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: FaIcon(Icons.clear, color: themeController.textMutedColor, size: 18),
+                ),
+              ),
+            ),
+          ],
         ],
       ),
     );
@@ -184,19 +246,18 @@ class _BlogScreenState extends State<BlogScreen> {
 
   Widget _buildBlogGrid(BuildContext context, ThemeController themeController) {
     final posts = _filteredPosts;
-    final width = MediaQuery.of(context).size.width;
-    final isMobile = width < AppBreakpoints.md;
+    final isMobile = MediaQuery.of(context).size.width < AppBreakpoints.md;
 
     if (posts.isEmpty) {
-      return Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 40),
-          child: Text(
-            'No posts found matching "$_searchQuery"',
-            style: TextStyle(
-              fontFamily: AppTheme.fontFamily,
-              color: themeController.textMutedColor,
-            ),
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 60),
+        child: Text(
+          _searchQuery.isNotEmpty
+              ? 'No posts found for "$_searchQuery"'
+              : 'No posts here yet.',
+          style: TextStyle(
+            fontFamily: AppTheme.fontFamily,
+            color: themeController.textMutedColor,
           ),
         ),
       );
@@ -209,21 +270,16 @@ class _BlogScreenState extends State<BlogScreen> {
       );
     }
 
-    const int columns = 2;
     const double spacing = 24;
-    final double gridWidth = AppLayout.maxContentWidth;
+    final double itemWidth =
+        (AppLayout.maxContentWidth - spacing) / 2;
 
-    // Calculate item width: (totalWidth - (spacing * (columns-1))) / columns
-    final double itemWidth = (gridWidth - (spacing * (columns - 1))) / columns;
-
-    // Desktop/tablet grid layout
     return Wrap(
       spacing: spacing,
-      runSpacing: 32,
-      children:
-          posts.map((post) {
-            return SizedBox(width: itemWidth, child: BlogCard(blogPost: post));
-          }).toList(),
+      runSpacing: 24,
+      children: posts.map((post) {
+        return SizedBox(width: itemWidth, child: BlogCard(blogPost: post));
+      }).toList(),
     );
   }
 }

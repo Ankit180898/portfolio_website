@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../models/user_profile.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
+import '../controllers/theme_controller.dart';
 
 class SocialButton extends StatelessWidget {
   final SocialLink socialLink;
@@ -10,31 +12,41 @@ class SocialButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-      onPressed: () => _launchURL(socialLink.url),
-      icon: _getIcon(),
-      tooltip: socialLink.name,
+    final themeController = Get.find<ThemeController>();
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () => _launchURL(socialLink.url),
+        borderRadius: BorderRadius.circular(8),
+        splashColor: themeController.textPrimaryColor.withOpacity(0.1),
+        highlightColor: themeController.textPrimaryColor.withOpacity(0.05),
+        child: Padding(padding: const EdgeInsets.all(8.0), child: _getIcon()),
+      ),
     );
   }
 
   Widget _getIcon() {
+    final themeController = Get.find<ThemeController>();
+    final iconColor = themeController.textPrimaryColor;
+
     switch (socialLink.icon.toLowerCase()) {
       case 'github':
-        return const FaIcon(FontAwesomeIcons.github);
+        return FaIcon(FontAwesomeIcons.github, color: iconColor);
       case 'linkedin':
-        return const FaIcon(FontAwesomeIcons.linkedin);
+        return FaIcon(FontAwesomeIcons.linkedin, color: iconColor);
       case 'twitter':
-        return const FaIcon(FontAwesomeIcons.twitter);
+        return FaIcon(FontAwesomeIcons.twitter, color: iconColor);
       case 'instagram':
-        return const FaIcon(FontAwesomeIcons.instagram);
+        return FaIcon(FontAwesomeIcons.instagram, color: iconColor);
       case 'youtube':
-        return const FaIcon(FontAwesomeIcons.youtube);
+        return FaIcon(FontAwesomeIcons.youtube, color: iconColor);
       case 'medium':
-        return const FaIcon(FontAwesomeIcons.medium);
+        return FaIcon(FontAwesomeIcons.medium, color: iconColor);
       case 'dribbble':
-        return const FaIcon(FontAwesomeIcons.dribbble);
+        return FaIcon(FontAwesomeIcons.dribbble, color: iconColor);
       default:
-        return const FaIcon(FontAwesomeIcons.link);
+        return FaIcon(FontAwesomeIcons.link, color: iconColor);
     }
   }
 

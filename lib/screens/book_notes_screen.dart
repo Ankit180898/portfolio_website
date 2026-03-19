@@ -71,13 +71,13 @@ class _BookNotesScreenState extends State<BookNotesScreen> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         // Header section
-                        const SizedBox(height: 40),
+                        SizedBox(height: isMobile ? 24 : 40),
                         _buildHeader(context, themeController),
-                        const SizedBox(height: 40),
+                        SizedBox(height: isMobile ? 24 : 40),
 
                         // Search bar
                         _buildSearchBar(context, themeController),
-                        const SizedBox(height: 40),
+                        SizedBox(height: isMobile ? 24 : 40),
 
                         // Books grid
                         _buildBooksGrid(context, isMobile, isTablet, isDesktop),
@@ -109,12 +109,12 @@ class _BookNotesScreenState extends State<BookNotesScreen> {
           children: [
             Image.network(
               'https://www.svgrepo.com/show/138319/open-book.svg',
-              width: isMobile ? 32 : 40,
-              height: isMobile ? 32 : 40,
+              width: isMobile ? 28 : 40,
+              height: isMobile ? 28 : 40,
               errorBuilder:
                   (context, error, stackTrace) => Text(
                     "📚 ",
-                    style: TextStyle(fontSize: isMobile ? 28 : 32),
+                    style: TextStyle(fontSize: isMobile ? 24 : 32),
                   ),
             ),
             const SizedBox(width: 12),
@@ -123,8 +123,8 @@ class _BookNotesScreenState extends State<BookNotesScreen> {
               style: TextStyle(
                 fontFamily: AppTheme.fontFamily,
                 fontWeight: AppTheme.bold,
-                fontSize: isMobile ? 28 : 36,
-                color: themeController.textPrimaryColor.withOpacity(0.8),
+                fontSize: isMobile ? 24 : 36,
+                color: themeController.textPrimaryColor,
               ),
             ),
           ],
@@ -140,8 +140,9 @@ class _BookNotesScreenState extends State<BookNotesScreen> {
             style: TextStyle(
               fontFamily: AppTheme.fontFamily,
               fontWeight: AppTheme.regular,
-              fontSize: isMobile ? 16 : 18,
+              fontSize: isMobile ? 14 : 18,
               color: themeController.textSecondaryColor,
+              height: 1.4,
             ),
           ),
         ),
@@ -171,6 +172,7 @@ class _BookNotesScreenState extends State<BookNotesScreen> {
           const SizedBox(width: 12),
           Expanded(
             child: TextField(
+              controller: TextEditingController(text: _searchQuery),
               onChanged: (value) {
                 setState(() {
                   _searchQuery = value;
@@ -200,6 +202,19 @@ class _BookNotesScreenState extends State<BookNotesScreen> {
               ),
             ),
           ),
+          if (_searchQuery.isNotEmpty)
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                  _searchQuery = '';
+                });
+              },
+              child: FaIcon(
+                Icons.clear,
+                color: themeController.textMutedColor,
+                size: 18,
+              ),
+            ),
         ],
       ),
     );

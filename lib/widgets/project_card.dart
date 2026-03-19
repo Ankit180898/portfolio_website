@@ -2,240 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import '../models/project.dart';
-import '../controllers/projects_controller.dart';
 import '../controllers/theme_controller.dart';
 import '../config/theme.dart';
 import '../config/constants.dart';
+import '../config/routes.dart';
 import 'dart:math' as math;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class ProjectCard extends StatelessWidget {
+class ProjectCard extends StatefulWidget {
   final Project project;
 
   const ProjectCard({super.key, required this.project});
 
   @override
-  Widget build(BuildContext context) {
-    // Check if we're on mobile (width < 600)
-    final bool isMobile = MediaQuery.of(context).size.width < 600;
+  State<ProjectCard> createState() => _ProjectCardState();
 
-    // Return the appropriate layout based on screen size
-    return isMobile
-        ? _buildMobileLayout(context)
-        : _buildDesktopLayout(context);
-  }
-
-  Widget _buildDesktopLayout(BuildContext context) {
-    final projectsController = Get.find<ProjectsController>();
-    final themeController = Get.find<ThemeController>();
-
-    // Get color based on project
-    final Color cardColor = _getColorForProject(project.title);
-
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      child: GestureDetector(
-        onTap: () => projectsController.openProject(project),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.transparent,
-            borderRadius: BorderRadius.circular(AppLayout.borderRadiusMD),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Project Image/Icon Container
-              AspectRatio(
-                aspectRatio: 1, // Square aspect ratio
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(AppLayout.borderRadiusMD),
-                  clipBehavior: Clip.antiAlias,
-                  child: Container(
-                    decoration:
-                        project.title == "Notion Icons 3D"
-                            ? const BoxDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                                colors: [
-                                  Color(0xFFFFA07A), // Light salmon
-                                  Color(0xFFFF00A0), // Hot pink
-                                  Color(0xFF9370DB), // Medium purple
-                                ],
-                              ),
-                            )
-                            : BoxDecoration(color: cardColor),
-                    child: Center(child: getProjectIcon(project.title)),
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 16),
-
-              // Project Title
-              Text(
-                project.title,
-                style: TextStyle(
-                  fontFamily: AppTheme.fontFamily,
-                  fontSize: AppTypography.font20,
-                  fontWeight: AppTheme.semiBold,
-                  color: themeController.textPrimaryColor.withOpacity(0.8),
-                  height: 1.2,
-                ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-
-              const SizedBox(height: 4),
-
-              // Project Timeline (if available)
-              // if (project.timeline != null && project.timeline!.isNotEmpty)
-              //   Container(
-              //     margin: const EdgeInsets.only(bottom: 8),
-              //     padding: const EdgeInsets.symmetric(
-              //       horizontal: 12,
-              //       vertical: 3,
-              //     ),
-              //     decoration: BoxDecoration(
-              //       color: themeController.isDarkMode
-              //           ? const Color(0xFF333333)
-              //           : const Color(0xFFEEEEEE),
-              //       borderRadius: BorderRadius.circular(4),
-              //     ),
-              //     child: Text(
-              //       project.timeline ?? "",
-              //       style: TextStyle(
-              //         fontFamily: AppTheme.fontFamily,
-              //         fontSize: AppTypography.font14,
-              //         fontWeight: AppTheme.regular,
-              //         color: themeController.textSecondaryColor,
-              //       ),
-              //     ),
-              //   ),
-
-              // Project Description
-              Text(
-                project.description,
-                style: TextStyle(
-                  fontFamily: AppTheme.fontFamily,
-                  fontSize: AppTypography.font16,
-                  height: 1.4,
-                  color: themeController.textSecondaryColor,
-                ),
-                maxLines: 3,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildMobileLayout(BuildContext context) {
-    final projectsController = Get.find<ProjectsController>();
-    final themeController = Get.find<ThemeController>();
-
-    // Get color based on project
-    final Color cardColor = _getColorForProject(project.title);
-
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      child: GestureDetector(
-        onTap: () => projectsController.openProject(project),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16.0),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Project icon/image
-              ClipRRect(
-                borderRadius: BorderRadius.circular(AppLayout.borderRadiusMD),
-                child: Container(
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(
-                    color: cardColor,
-                    border: Border.all(
-                      width: 1,
-                      color: AppTheme.borderColor(themeController.isDarkMode),
-                    ),
-                  ),
-                  child: Center(child: getProjectIcon(project.title, size: 40)),
-                ),
-              ),
-              const SizedBox(width: 16),
-
-              // Project details
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Project title
-                    Text(
-                      project.title,
-                      style: TextStyle(
-                        fontFamily: AppTheme.fontFamily,
-                        fontSize: AppTypography.font18,
-                        fontWeight: AppTheme.semiBold,
-                        color: themeController.textPrimaryColor.withOpacity(
-                          0.8,
-                        ),
-                        height: 1.2,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: 4),
-
-                    // Project Timeline (if available)
-                    // if (project.timeline != null && project.timeline!.isNotEmpty)
-                    //   Container(
-                    //     margin: const EdgeInsets.only(bottom: 4),
-                    //     padding: const EdgeInsets.symmetric(
-                    //       horizontal: 8,
-                    //       vertical: 2,
-                    //     ),
-                    //     decoration: BoxDecoration(
-                    //       color: themeController.isDarkMode
-                    //           ? const Color(0xFF333333)
-                    //           : const Color(0xFFEEEEEE),
-                    //       borderRadius: BorderRadius.circular(4),
-                    //     ),
-                    //     child: Text(
-                    //       project.timeline ?? "",
-                    //       style: TextStyle(
-                    //         fontFamily: AppTheme.fontFamily,
-                    //         fontSize: AppTypography.font12,
-                    //         fontWeight: AppTheme.regular,
-                    //         color: themeController.textSecondaryColor,
-                    //       ),
-                    //     ),
-                    //   ),
-                    const SizedBox(height: 4),
-
-                    // Project description
-                    Text(
-                      project.description,
-                      style: TextStyle(
-                        fontFamily: AppTheme.fontFamily,
-                        fontSize: AppTypography.font14,
-                        height: 1.4,
-                        color: themeController.textSecondaryColor,
-                      ),
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
+  // Static icon helper — accessible as ProjectCard.getProjectIcon(title)
   static Widget getProjectIcon(String title, {double? size}) {
     final double iconSize = size ?? 64.0;
 
@@ -339,36 +121,298 @@ class ProjectCard extends StatelessWidget {
     }
   }
 
-  Color _getColorForProject(String title) {
-    // Return specific colors for featured projects
+  // Static color helper
+  static Color getColorForProject(String title) {
     switch (title) {
       case "Bohri Cupid":
-        return const Color(0xFFFFD700); // dark gold
+        return const Color(0xFFFFD700);
       case "Spendify":
-        return const Color(0xFF8BC34A); // Green
+        return const Color(0xFF8BC34A);
       case "FlutterStack":
-        return const Color(0xFF4169E1); // Royal blue
+        return const Color(0xFF4169E1);
       case "Artwork Images":
-        return const Color(0xFFFF4081); // Pink
+        return const Color(0xFFFF4081);
       case "Home|Home 4IM":
-        return const Color(0xFFB3E141); // Bright green
+        return const Color(0xFFB3E141);
       case "BlingBill":
-        return const Color.fromARGB(255, 255, 213, 140); // Dark grey/black
+        return const Color(0xFFFFD58C);
       case "Sheqonomi":
-        return const Color(0xFF039BE5); // Light blue
+        return const Color(0xFF039BE5);
       case "MonkeyType Clone":
-        return const Color(0xFF8D7B68); // Brown
+        return const Color(0xFF8D7B68);
       case "Notion Icons 3D":
-        return const Color(0xFF9370DB); // Medium purple for gradient background
+        return const Color(0xFF9370DB);
       default:
-        // For other projects, generate a random color
         final random = math.Random(title.hashCode);
         return Color.fromRGBO(
-          random.nextInt(200) + 55, // Ensure it's not too dark
+          random.nextInt(200) + 55,
           random.nextInt(200) + 55,
           random.nextInt(200) + 55,
           1,
         );
     }
+  }
+}
+
+class _ProjectCardState extends State<ProjectCard> {
+  bool _isHovered = false;
+
+  void _onHoverEnter() => setState(() => _isHovered = true);
+  void _onHoverExit() => setState(() => _isHovered = false);
+
+  @override
+  Widget build(BuildContext context) {
+    final bool isMobile =
+        MediaQuery.of(context).size.width < AppBreakpoints.md;
+    return isMobile
+        ? _buildMobileLayout(context)
+        : _buildDesktopLayout(context);
+  }
+
+  Widget _buildDesktopLayout(BuildContext context) {
+    final themeController = Get.find<ThemeController>();
+    final Color cardColor =
+        ProjectCard.getColorForProject(widget.project.title);
+
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      onEnter: (_) => _onHoverEnter(),
+      onExit: (_) => _onHoverExit(),
+      child: GestureDetector(
+        onTap: () =>
+            Get.toNamed(AppRoutes.worksDetail, arguments: widget.project),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Project Image/Icon Container
+            AspectRatio(
+              aspectRatio: 1,
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                decoration: widget.project.title == "Notion Icons 3D"
+                    ? BoxDecoration(
+                        borderRadius:
+                            BorderRadius.circular(AppLayout.borderRadiusMD),
+                        gradient: const LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [
+                            Color(0xFFFFA07A),
+                            Color(0xFFFF00A0),
+                            Color(0xFF9370DB),
+                          ],
+                        ),
+                        border: Border.all(
+                          color: _isHovered
+                              ? themeController.textPrimaryColor
+                                  .withValues(alpha: 0.2)
+                              : Colors.transparent,
+                          width: 1,
+                        ),
+                      )
+                    : BoxDecoration(
+                        color: cardColor,
+                        borderRadius:
+                            BorderRadius.circular(AppLayout.borderRadiusMD),
+                        border: Border.all(
+                          color: _isHovered
+                              ? themeController.textPrimaryColor
+                                  .withValues(alpha: 0.2)
+                              : Colors.transparent,
+                          width: 1,
+                        ),
+                        boxShadow: _isHovered
+                            ? [
+                                BoxShadow(
+                                  color: themeController.isDarkMode
+                                      ? Colors.black.withValues(alpha: 0.25)
+                                      : Colors.black.withValues(alpha: 0.1),
+                                  blurRadius: 16,
+                                  offset: const Offset(0, 6),
+                                ),
+                              ]
+                            : [],
+                      ),
+                child: ClipRRect(
+                  borderRadius:
+                      BorderRadius.circular(AppLayout.borderRadiusMD),
+                  child: Center(
+                    child: ProjectCard.getProjectIcon(widget.project.title),
+                  ),
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 16),
+
+            Text(
+              widget.project.title,
+              style: TextStyle(
+                fontFamily: AppTheme.fontFamily,
+                fontSize: AppTypography.font20,
+                fontWeight: AppTheme.semiBold,
+                color:
+                    themeController.textPrimaryColor.withValues(alpha: 0.8),
+                height: 1.2,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+
+            const SizedBox(height: 4),
+
+            Text(
+              widget.project.description,
+              style: TextStyle(
+                fontFamily: AppTheme.fontFamily,
+                fontSize: AppTypography.font16,
+                height: 1.4,
+                color: themeController.textSecondaryColor,
+              ),
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
+            ),
+
+            const SizedBox(height: 12),
+
+            _buildTechChips(themeController),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMobileLayout(BuildContext context) {
+    final themeController = Get.find<ThemeController>();
+    final Color cardColor =
+        ProjectCard.getColorForProject(widget.project.title);
+
+    return GestureDetector(
+      onTap: () =>
+          Get.toNamed(AppRoutes.worksDetail, arguments: widget.project),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.transparent,
+          borderRadius: BorderRadius.circular(AppLayout.borderRadiusMD),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 12.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Project icon/image
+              ClipRRect(
+                borderRadius:
+                    BorderRadius.circular(AppLayout.borderRadiusMD),
+                child: Container(
+                  width: 80,
+                  height: 80,
+                  decoration: BoxDecoration(
+                    color: cardColor,
+                    border: Border.all(
+                      width: 1,
+                      color: AppTheme.borderColor(themeController.isDarkMode),
+                    ),
+                  ),
+                  child: Center(
+                    child: ProjectCard.getProjectIcon(
+                      widget.project.title,
+                      size: 40,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 16),
+
+              // Project details
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      widget.project.title,
+                      style: TextStyle(
+                        fontFamily: AppTheme.fontFamily,
+                        fontSize: AppTypography.font18,
+                        fontWeight: AppTheme.semiBold,
+                        color: themeController.textPrimaryColor,
+                        height: 1.2,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 4),
+
+                    Text(
+                      widget.project.description,
+                      style: TextStyle(
+                        fontFamily: AppTheme.fontFamily,
+                        fontSize: AppTypography.font14,
+                        height: 1.4,
+                        color: themeController.textSecondaryColor,
+                      ),
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+
+                    const SizedBox(height: 8),
+
+                    _buildTechChips(themeController),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTechChips(ThemeController themeController) {
+    final techs = widget.project.technologies;
+    const int maxVisible = 3;
+    final int extra = techs.length - maxVisible;
+    final visibleTechs =
+        techs.length > maxVisible ? techs.take(maxVisible).toList() : techs;
+
+    return Wrap(
+      spacing: 6,
+      runSpacing: 6,
+      children: [
+        ...visibleTechs.map(
+          (tech) => Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: themeController.borderColor),
+            ),
+            child: Text(
+              tech,
+              style: TextStyle(
+                fontFamily: AppTheme.fontFamily,
+                fontSize: 11,
+                color: themeController.textSecondaryColor,
+              ),
+            ),
+          ),
+        ),
+        if (extra > 0)
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: themeController.borderColor),
+            ),
+            child: Text(
+              '+$extra more',
+              style: TextStyle(
+                fontFamily: AppTheme.fontFamily,
+                fontSize: 11,
+                color: themeController.textMutedColor,
+              ),
+            ),
+          ),
+      ],
+    );
   }
 }

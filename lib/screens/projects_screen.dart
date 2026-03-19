@@ -1,15 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:portfolio_website/widgets/project_card.dart';
 import '../controllers/projects_controller.dart';
 import '../controllers/theme_controller.dart';
 import '../widgets/nav_bar.dart';
 import '../widgets/footer.dart';
+import '../widgets/project_card.dart';
 import '../config/theme.dart';
 import '../config/constants.dart';
 
-class ProjectsScreen extends StatelessWidget {
+class ProjectsScreen extends StatefulWidget {
   const ProjectsScreen({super.key});
+
+  @override
+  State<ProjectsScreen> createState() => _ProjectsScreenState();
+}
+
+class _ProjectsScreenState extends State<ProjectsScreen> {
+  late TextEditingController _searchController;
+
+  @override
+  void initState() {
+    super.initState();
+    _searchController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    final controller = Get.find<ProjectsController>();
+    controller.setSearchQuery('');
+    _searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,18 +40,12 @@ class ProjectsScreen extends StatelessWidget {
     final width = MediaQuery.of(context).size.width;
     final isMobile = width < AppBreakpoints.md;
 
-    // Wrap the entire screen in Obx to listen for theme changes
     return Obx(() {
-      final isDarkMode = themeController.isDarkMode;
-
       return Scaffold(
-        backgroundColor: isDarkMode ? const Color(0xFF18181B) : Colors.white,
+        backgroundColor: themeController.backgroundColor,
         body: Column(
           children: [
-            // Navigation bar
             const NavBar(currentIndex: 0),
-
-            // Main content
             Expanded(
               child: SingleChildScrollView(
                 child: Center(
@@ -43,18 +59,18 @@ class ProjectsScreen extends StatelessWidget {
                       children: [
                         const SizedBox(height: 60),
 
-                        // Header
-                        _buildHeader(themeController),
-                        const SizedBox(height: 60),
-                        // Header
-                        _buildFilterChips(controller, themeController),
-                        const SizedBox(height: 60),
+                        _buildHeader(context, themeController, isMobile),
+                        const SizedBox(height: 40),
 
-                        // Projects grid or list
+                        _buildFilterChips(controller, themeController),
+                        const SizedBox(height: 32),
+
+                        _buildSearchBar(controller, themeController),
+                        const SizedBox(height: 32),
+
                         _buildProjects(context, controller),
                         const SizedBox(height: 80),
 
-                        // Footer
                         const Footer(),
                       ],
                     ),
@@ -68,16 +84,18 @@ class ProjectsScreen extends StatelessWidget {
     });
   }
 
-  Widget _buildHeader(ThemeController themeController) {
+  Widget _buildHeader(
+    BuildContext context,
+    ThemeController themeController,
+    bool isMobile,
+  ) {
     return Column(
       children: [
-        // Title with emoji and angle brackets
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Left arrow
             Text(
-              "›",
+              '〈',
               style: TextStyle(
                 color: themeController.textMutedColor,
                 fontSize: 24,
@@ -85,26 +103,23 @@ class ProjectsScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 8),
-
-            // Emoji with briefcase
-            const Text("👨‍💻", style: TextStyle(fontSize: 32)),
-            const SizedBox(width: 12),
-
-            // Works text
             Text(
-              "Works",
+              '👨‍💻',
+              style: TextStyle(fontSize: isMobile ? 24 : 32),
+            ),
+            const SizedBox(width: 12),
+            Text(
+              'Works',
               style: TextStyle(
                 fontFamily: AppTheme.fontFamily,
-                fontSize: 48,
+                fontSize: 32,
                 fontWeight: AppTheme.bold,
                 color: themeController.textPrimaryColor,
               ),
             ),
             const SizedBox(width: 8),
-
-            // Right arrow
             Text(
-              "‹",
+              '〉',
               style: TextStyle(
                 color: themeController.textMutedColor,
                 fontSize: 24,
@@ -114,10 +129,8 @@ class ProjectsScreen extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 16),
-
-        // Description
         Text(
-          "A collection of links to my current & previous works and projects",
+          "A showcase of apps, tools, and experiments I've built",
           textAlign: TextAlign.center,
           style: TextStyle(
             fontFamily: AppTheme.fontFamily,
@@ -141,72 +154,161 @@ class ProjectsScreen extends StatelessWidget {
           spacing: 12,
           runSpacing: 12,
           alignment: WrapAlignment.center,
-          children:
-              controller.filters.map((filter) {
-                final isSelected = controller.activeFilter.value == filter;
+          children: controller.filters.map((filter) {
+            final isSelected = controller.activeFilter.value == filter;
 
-                return InkWell(
-                  onTap: () => controller.setFilter(filter),
+            return InkWell(
+              onTap: () => controller.setFilter(filter),
+              borderRadius: BorderRadius.circular(24),
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 8,
+                ),
+                decoration: BoxDecoration(
+                  color: isSelected
+                      ? themeController.textPrimaryColor.withValues(alpha: 0.9)
+                      : Colors.transparent,
                   borderRadius: BorderRadius.circular(24),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 8,
-                    ),
-                    decoration: BoxDecoration(
-                      color:
-                          isSelected
-                              ? themeController.textMutedColor
-                              : Colors.transparent,
-                      borderRadius: BorderRadius.circular(24),
-                      border: Border.all(
-                        color:
-                            isSelected
-                                ? Colors.transparent
-                                : themeController.textMutedColor.withOpacity(
-                                  0.3,
-                                ),
-                        width: 1,
-                      ),
-                    ),
-                    child: Text(
-                      filter,
-                      style: TextStyle(
-                        fontFamily: AppTheme.fontFamily,
-                        fontSize: 14,
-                        fontWeight:
-                            isSelected ? AppTheme.semiBold : AppTheme.medium,
-                        color:
-                            isSelected
-                                ? Colors.white
-                                : themeController.textPrimaryColor.withOpacity(
-                                  0.8,
-                                ),
-                      ),
-                    ),
+                  border: Border.all(
+                    color: isSelected
+                        ? Colors.transparent
+                        : themeController.textMutedColor
+                            .withValues(alpha: 0.35),
+                    width: 1,
                   ),
-                );
-              }).toList(),
+                ),
+                child: Text(
+                  filter,
+                  style: TextStyle(
+                    fontFamily: AppTheme.fontFamily,
+                    fontSize: 14,
+                    fontWeight:
+                        isSelected ? AppTheme.semiBold : AppTheme.medium,
+                    color: isSelected
+                        ? themeController.backgroundColor
+                        : themeController.textMutedColor,
+                  ),
+                ),
+              ),
+            );
+          }).toList(),
         ),
       );
     });
   }
 
-  Widget _buildProjects(BuildContext context, ProjectsController controller) {
+  Widget _buildSearchBar(
+    ProjectsController controller,
+    ThemeController themeController,
+  ) {
+    return Container(
+      height: 48,
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: themeController.isDarkMode
+            ? const Color(0xFF222222)
+            : AppTheme.lightSurface,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: themeController.borderColor, width: 1),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Row(
+        children: [
+          Icon(Icons.search, color: themeController.textMutedColor, size: 20),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Obx(() {
+              return TextField(
+                controller: _searchController,
+                onChanged: (value) => controller.setSearchQuery(value),
+                cursorColor:
+                    themeController.textPrimaryColor.withValues(alpha: 0.8),
+                cursorWidth: 1,
+                cursorRadius: const Radius.circular(1),
+                style: TextStyle(
+                  fontFamily: AppTheme.fontFamily,
+                  color:
+                      themeController.textPrimaryColor.withValues(alpha: 0.8),
+                  fontSize: 15,
+                  fontWeight: AppTheme.regular,
+                  height: 1.5,
+                ),
+                decoration: InputDecoration(
+                  hintText: 'Search projects...',
+                  hintStyle: TextStyle(
+                    fontFamily: AppTheme.fontFamily,
+                    color: themeController.textMutedColor,
+                    fontSize: 15,
+                    fontWeight: AppTheme.regular,
+                  ),
+                  border: InputBorder.none,
+                  contentPadding:
+                      const EdgeInsets.symmetric(vertical: 14),
+                  isDense: true,
+                ),
+              );
+            }),
+          ),
+          Obx(() {
+            if (controller.searchQuery.value.isEmpty) {
+              return const SizedBox.shrink();
+            }
+            return Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const SizedBox(width: 8),
+                Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: () {
+                      controller.setSearchQuery('');
+                      _searchController.clear();
+                    },
+                    borderRadius: BorderRadius.circular(4),
+                    splashColor: themeController.textPrimaryColor
+                        .withValues(alpha: 0.1),
+                    highlightColor: themeController.textPrimaryColor
+                        .withValues(alpha: 0.05),
+                    child: Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: FaIcon(
+                        Icons.clear,
+                        color: themeController.textMutedColor,
+                        size: 18,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          }),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildProjects(
+    BuildContext context,
+    ProjectsController controller,
+  ) {
     final width = MediaQuery.of(context).size.width;
     final isMobile = width < AppBreakpoints.md;
 
-    // Use list view for mobile and grid for desktop
     if (isMobile) {
       return _buildProjectsList(controller);
     } else {
-      return _buildProjectsGrid(context, controller);
+      return _buildProjectsGrid(controller);
     }
   }
 
   Widget _buildProjectsList(ProjectsController controller) {
     return Obx(() {
       final projects = controller.filteredProjects;
+
+      if (projects.isEmpty) {
+        return _buildEmpty(controller);
+      }
 
       return ListView.separated(
         shrinkWrap: true,
@@ -220,19 +322,17 @@ class ProjectsScreen extends StatelessWidget {
     });
   }
 
-  Widget _buildProjectsGrid(
-    BuildContext context,
-    ProjectsController controller,
-  ) {
+  Widget _buildProjectsGrid(ProjectsController controller) {
     return Obx(() {
       final projects = controller.filteredProjects;
 
-      // Always use exactly 3 columns for consistency with navbar width
+      if (projects.isEmpty) {
+        return _buildEmpty(controller);
+      }
+
       const int columns = 3;
       const double spacing = 24;
       final double gridWidth = AppLayout.maxContentWidth;
-
-      // Calculate item width: (totalWidth - (spacing * (columns-1))) / columns
       final double itemWidth =
           (gridWidth - (spacing * (columns - 1))) / columns;
 
@@ -248,5 +348,21 @@ class ProjectsScreen extends StatelessWidget {
         }),
       );
     });
+  }
+
+  Widget _buildEmpty(ProjectsController controller) {
+    final themeController = Get.find<ThemeController>();
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 60),
+      child: Text(
+        controller.searchQuery.value.isNotEmpty
+            ? 'No projects found for "${controller.searchQuery.value}"'
+            : 'No projects here yet.',
+        style: TextStyle(
+          fontFamily: AppTheme.fontFamily,
+          color: themeController.textMutedColor,
+        ),
+      ),
+    );
   }
 }
