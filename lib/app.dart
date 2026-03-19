@@ -9,33 +9,28 @@ class PortfolioApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Get the theme controller instance
     final ThemeController themeController = Get.find<ThemeController>();
 
-    // Use Obx to reactively rebuild when theme changes
-    return Obx(() {
-      debugPrint('Rebuilding app with themeMode: ${themeController.themeMode}');
-      debugPrint('IsDarkMode: ${themeController.isDarkMode}');
-
-      return GetMaterialApp(
-        title: 'Ankit Kumar | Portfolio',
-        debugShowCheckedModeBanner: false,
-        theme: AppTheme.lightTheme,
-        darkTheme: AppTheme.darkTheme,
-        themeMode: themeController.themeMode,
-        getPages: AppRoutes.pages,
-        initialRoute: AppRoutes.home,
-        defaultTransition: Transition.fadeIn,
-        transitionDuration: const Duration(milliseconds: 300),
-        builder: (context, child) {
-          return MediaQuery(
-            data: MediaQuery.of(
-              context,
-            ).copyWith(textScaler: TextScaler.linear(1.0)),
-            child: child!,
-          );
-        },
-      );
-    });
+    // Do NOT wrap GetMaterialApp in Obx — it causes a full app rebuild on every
+    // theme change, producing a white flash. Theme switching is handled
+    // reactively by Get.changeThemeMode() inside ThemeController._updateTheme.
+    return GetMaterialApp(
+      title: 'Ankit Kumar | Portfolio',
+      debugShowCheckedModeBanner: false,
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: themeController.themeMode,
+      getPages: AppRoutes.pages,
+      initialRoute: AppRoutes.home,
+      defaultTransition: Transition.noTransition,
+      builder: (context, child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(
+            textScaler: TextScaler.linear(1.0),
+          ),
+          child: child!,
+        );
+      },
+    );
   }
 }

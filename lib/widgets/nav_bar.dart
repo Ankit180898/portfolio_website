@@ -67,30 +67,14 @@ class NavBar extends StatelessWidget {
                     ),
                     const SizedBox(width: 28),
                     _buildNavItem(
-                      'book notes',
-                      2,
-                      AppRoutes.bookNotes,
-                      controller,
-                      isDark,
-                    ),
-                    const SizedBox(width: 28),
-                    _buildNavItem(
-                      'resources',
-                      3,
-                      AppRoutes.resources,
-                      controller,
-                      isDark,
-                    ),
-                    const SizedBox(width: 28),
-                    _buildNavItem(
                       'about',
-                      4,
+                      2,
                       AppRoutes.about,
                       controller,
                       isDark,
                     ),
                     const SizedBox(width: 28),
-                    _buildNavItem('now', 5, AppRoutes.now, controller, isDark),
+                    _buildNavItem('now', 3, AppRoutes.now, controller, isDark),
                     const SizedBox(width: 28),
                     _buildThemeToggle(controller, isDark),
                   ],
@@ -188,7 +172,7 @@ class NavBar extends StatelessWidget {
         isDark ? AppTheme.darkTextPrimary : const Color(0xFF27272A);
 
     return TextButton(
-      onPressed: () => Get.toNamed(route),
+      onPressed: () => Get.offAllNamed(route),
       style: ButtonStyle(
         overlayColor: WidgetStateProperty.all(Colors.transparent),
         padding: WidgetStateProperty.all(EdgeInsets.zero),
@@ -275,30 +259,12 @@ class NavBar extends StatelessWidget {
                   child: _buildMobileMenuItem('blog', 1, controller, isDark),
                 ),
                 GestureDetector(
-                  onTap: () => _navigateTo(context, AppRoutes.bookNotes),
-                  child: _buildMobileMenuItem(
-                    'book notes',
-                    2,
-                    controller,
-                    isDark,
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () => _navigateTo(context, AppRoutes.resources),
-                  child: _buildMobileMenuItem(
-                    'resources',
-                    3,
-                    controller,
-                    isDark,
-                  ),
-                ),
-                GestureDetector(
                   onTap: () => _navigateTo(context, AppRoutes.about),
-                  child: _buildMobileMenuItem('about', 4, controller, isDark),
+                  child: _buildMobileMenuItem('about', 2, controller, isDark),
                 ),
                 GestureDetector(
                   onTap: () => _navigateTo(context, AppRoutes.now),
-                  child: _buildMobileMenuItem('now', 5, controller, isDark),
+                  child: _buildMobileMenuItem('now', 3, controller, isDark),
                 ),
               ],
             ),
@@ -309,7 +275,7 @@ class NavBar extends StatelessWidget {
   void _navigateTo(BuildContext context, String route) {
     Navigator.pop(context); // Close the bottom sheet
     Future.delayed(const Duration(milliseconds: 100), () {
-      Get.toNamed(route);
+      Get.offAllNamed(route);
     });
   }
 

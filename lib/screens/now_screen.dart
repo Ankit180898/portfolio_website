@@ -34,7 +34,7 @@ class NowScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               // Navigation bar for both mobile and desktop
-              const NavBar(currentIndex: 5),
+              const NavBar(currentIndex: 3),
 
               // Now content
               Center(

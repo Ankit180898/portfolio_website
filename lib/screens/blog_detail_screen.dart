@@ -14,7 +14,11 @@ class BlogDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final BlogPost post = Get.arguments as BlogPost;
+    final BlogPost? post = Get.arguments as BlogPost?;
+    if (post == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => Get.back());
+      return const SizedBox.shrink();
+    }
     final themeController = Get.find<ThemeController>();
     final isMobile = MediaQuery.of(context).size.width < AppBreakpoints.md;
 

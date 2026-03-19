@@ -32,7 +32,7 @@ class AboutScreen extends StatelessWidget {
         body: Column(
           children: [
             // Navigation bar - use standard navbar for both mobile and desktop
-            const NavBar(currentIndex: 4),
+            const NavBar(currentIndex: 2),
 
             // Main content
             Expanded(

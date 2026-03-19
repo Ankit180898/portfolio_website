@@ -16,7 +16,11 @@ class ProjectDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Project project = Get.arguments as Project;
+    final Project? project = Get.arguments as Project?;
+    if (project == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => Get.back());
+      return const SizedBox.shrink();
+    }
     final themeController = Get.find<ThemeController>();
     final isMobile = MediaQuery.of(context).size.width < AppBreakpoints.md;
 
